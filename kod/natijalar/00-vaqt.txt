@@ -1,6 +1,5 @@
-Bandit: 1 s
-Semgrep (rasmiy): 173 s
-Semgrep (maxsus): 260 s
-pip-audit: 3 s
-CodeQL (baza yaratish): 12 s
-CodeQL (tahlil): 2761 s
+Bandit: 2 s
+Semgrep (rasmiy): 11 s
+Semgrep (maxsus): 7 s
+pip-audit: 5 s
+CodeQL: 57 s

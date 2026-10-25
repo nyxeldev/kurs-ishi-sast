@@ -96,7 +96,53 @@ sinovdagi hech bir vosita topmadi.
 
 ---
 
-## 4. Muhim kuzatuv (kurs ishi uchun)
+## 4. Tasdiqlangan yolg'on ijobiy natija: ochiq qayta yo'naltirish
+
+Semgrep ning rasmiy `python.flask.security.open-redirect.open-redirect`
+qoidasi `app.py:124` da topilma beradi va uni CWE-601 (ochiq qayta
+yo'naltirish, open redirect) deb belgilaydi. Topilma etalon ro'yxatda
+yo'q edi, shuning uchun u dastlab etalonning kamchiligi deb taxmin
+qilindi va Z-25 sifatida ro'yxatga qo'shish ko'rib chiqildi.
+
+Tekshiruv bu taxminni rad etdi.
+
+**Kod:**
+
+```python
+javob = redirect("/profil?ism=" + login)
+```
+
+**Sabab.** Qayta yo'naltirish manzili har doim `/profil?ism=` bilan
+boshlanadi — bu sayt ichidagi nisbiy yo'l. Hujumchi faqat so'rov satri
+(query string) qiymatini boshqaradi, satrning boshini emas. Shu sababli
+`//evil.com` yoki `https://evil.com` ko'rinishidagi tashqi manzilni
+hosil qilib bo'lmaydi. Boshqa saytga yo'naltirish imkoni bo'lmasa,
+CWE-601 ta'rifi bajarilmaydi.
+
+**Vositalarning xulq-atvori:**
+
+| Vosita | Natija | Sababi |
+|---|---|---|
+| Semgrep (rasmiy) | topilma berdi | taint qoidasi: "so'rov ma'lumoti `redirect()` ga yetib bordi". Cho'kmadagi manzil qattiq kodlangan prefiks bilan bog'lanmaganmi — tekshirmaydi |
+| CodeQL | topilma bermadi | `py/url-redirection` (CWE-601) so'rovi ishga tushdi va SARIF da e'lon qilingan, lekin natija bermadi: uning modeli hujumchi host'ni o'zgartira olishini talab qiladi |
+| Bandit | topilma bermadi | bunday qoida umuman yo'q |
+
+**Xulosa.** Bu topilma — **haqiqiy yolg'on ijobiy natija**, etalonning
+kamchiligi emas. Z-25 sifatida qo'shilmadi: qo'shilganda Semgrep ning
+Precision ko'rsatkichi sun'iy ravishda 1.00 ga ko'tarilar, to'g'ri
+ishlagan CodeQL esa o'tkazib yuborish (FN) uchun jazolanar edi.
+
+Ish uchun ahamiyati (3.3-band, yolg'on ijobiy natijalar tahlili): bu
+bitta misolda shablon asosidagi va semantik tahlil o'rtasidagi farq
+ko'rinadi. Semgrep ma'lumot oqimini kuzatadi, lekin cho'kmaning
+kontekstini baholamaydi; CodeQL zaiflikning ekspluatatsiya qilinish
+shartini modellashtiradi va shu sababli jim qoladi. Yolg'on ijobiy
+natijalarning katta qismi aynan shunday — qoida to'g'ri ishlaydi, lekin
+uning modeli haqiqiy xavfni ifodalash uchun yetarlicha nozik emas.
+
+---
+
+## 5. Muhim kuzatuv (kurs ishi uchun)
 
 Bandit ning qattiq kodlangan sirlarni aniqlash qoidasi **o'zgaruvchi
 nomining tiliga bog'liq**. Ingliz tilidagi `SECRET_KEY` topildi, lekin
@@ -109,7 +155,7 @@ qoidalar (3.4-band).
 
 ---
 
-## 5. Metrikalarni hisoblash
+## 6. Metrikalarni hisoblash
 
 ```
 TP = etalon ro'yxatdan to'g'ri topilganlar soni

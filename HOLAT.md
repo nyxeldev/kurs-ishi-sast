@@ -28,12 +28,16 @@ Oxirgi yangilanish: 2026-10-26
 - [x] `sast.yml` workflow sinovdan o'tdi, ikki nuqson tuzatildi
 - [x] GitHub Security tab natijalari olindi (70 ogohlantirish)
 - [x] Diagrammalar yasaldi (`diagramma.py`, natija fayllaridan hisoblanadi)
+- [x] M-4 tekshirildi: open redirect topilmasi tasdiqlangan yolg'on ijobiy
+      natija ekani aniqlanib, hujjatlashtirildi (etalon 24 ta bo'lib qoldi)
+- [x] M-8 tekshirildi: vaqt farqi kesh bilan izohlanib, xato xulosa olib
+      tashlandi
 
 ## Bajarilishi kerak
 
 ### Amaliy qism (Claude Code)
 - [ ] Skrinshotlar: har bir vosita chiqishi, GitHub Security tabi
-- [ ] M-4, M-5, M-7, M-8 bo'yicha qarorlar (pastda)
+- [ ] M-5, M-7, M-9 bo'yicha qarorlar (pastda)
 
 ### Matn (Cowork)
 - [ ] 01-bob (11 bet)
@@ -74,26 +78,32 @@ kiritilgan.
 
 Manba: `kod/natijalar/00-vaqt.txt`
 
-| Bosqich | Vaqt |
-|---|---|
-| Bandit | 1 s |
-| Semgrep (rasmiy qoidalar) | 173 s |
-| Semgrep (maxsus qoidalar) | 260 s |
-| pip-audit | 3 s |
-| CodeQL — baza yaratish | 12 s |
-| CodeQL — tahlil (`security-extended`, 52 so'rov) | 2761 s |
+| Bosqich | Birinchi ishga tushirish | Takroriy ishga tushirish | GitHub Actions |
+|---|---|---|---|
+| Bandit | 1 s | 2 s | 20 s |
+| Semgrep (rasmiy qoidalar) | 173 s | 11 s | 45 s |
+| Semgrep (maxsus qoidalar) | 260 s | 7 s | (yuqoridagi ish ichida) |
+| pip-audit | 3 s | 5 s | 13 s |
+| CodeQL (baza + `security-extended`) | 2773 s | 57 s | 39 s |
 
-CodeQL tahlilining 1514 soniyasi (25 daqiqa) bitta so'rovga —
-`CWE-502/UnsafeDeserialization` ga ketdi.
+Lokal ustunlar — `kod/natijalar/00-vaqt.txt`; CI ustuni — ish (job)
+davomiyligi, unga `checkout` va muhitni tayyorlash ham kiradi.
 
-> DIQQAT (M-8): bu raqamni CodeQL ning o'ziga xos qiymati deb keltirish
-> mumkin emas. Ayni shu tahlil GitHub Actions ubuntu-latest ishchisida
-> **39 soniyada** tugadi — lokal Windows o'lchoviga qaraganda ~70 barobar
-> tez. Sabab tekshirilmagan (platforma, protsessor, disk tezligi yoki
-> antivirus ta'siri bo'lishi mumkin). Ishda vaqt qiyoslashi uchun CI
-> o'lchovlari ishlatilishi tavsiya etiladi, lokal raqam esa "bir xil
-> so'rov muhitga qarab necha barobar farq qilishi" misoli sifatida
-> keltirilsa to'g'ri bo'ladi.
+**Birinchi va takroriy ishga tushirish farqi hal qiluvchi ahamiyatga ega.**
+Birinchi ishda Semgrep qoidalar bazasini tarmoqdan yuklab oladi, CodeQL esa
+so'rovlarni kompilyatsiya qiladi: `CWE-502/UnsafeDeserialization` so'rovi
+birinchi safar 1514 soniya (25 daqiqa), ikkinchi safar 12 soniya ishladi.
+Kesh isigach CodeQL ning to'liq tahlili 2773 dan 57 soniyaga tushdi —
+48 barobar.
+
+> TUZATISH (M-8 yopildi): HOLAT.md ning avvalgi tahririda "CodeQL Bandit
+> dan ~2770 barobar sekin" degan xulosa bor edi. **Bu noto'g'ri.** O'sha
+> raqam tahlil narxini emas, bir martalik tayyorgarlik narxini o'lchagan.
+> Ushbu 3 modulli, ~290 qatorli sinov obyektida kesh isiganidan keyin
+> to'rtala vosita ham soniyalar ichida tugaydi va ular orasidagi tezlik
+> farqi amaliy ahamiyatga ega emas. "Chuqur tahlil sekin" degan tezisni
+> bu korpusda umuman tekshirib bo'lmaydi — buning uchun ancha katta kod
+> bazasi kerak. Ishda shu cheklov ochiq aytilishi shart (2.2-band).
 
 ---
 
@@ -124,15 +134,23 @@ Etalon to'plam: 24 ta zaiflik.
 
 ### Vositalarni birgalikda qo'llash
 
-| Kombinatsiya | Qoplama |
+Ochko'z (greedy) tartib — har qadamda eng ko'p yangi zaiflik qo'shadigan
+vosita:
+
+| Qadam | Qoplama |
 |---|---|
-| Bandit yolg'iz | 19 / 24 |
-| Bandit + CodeQL | 21 / 24 |
-| Bandit + maxsus qoidalar | 23 / 24 |
-| **Bandit + CodeQL + maxsus qoidalar** | **24 / 24** |
+| Bandit | 19 / 24 |
+| + Semgrep (maxsus qoidalar) | 23 / 24 |
+| **+ CodeQL** | **24 / 24** |
 
 Hech bir vosita yolg'iz 19 tadan ko'pini topmadi, uchtasi birgalikda esa
 to'liq qoplama beradi. Bu xulosa bobining asosiy dalili.
+
+Semgrep ning rasmiy qoidalari bu ketma-ketlikka kirmadi: ular topgan 15 ta
+zaiflikning hammasini yuqoridagi uchlik allaqachon qamrab oladi. Bu
+"ko'proq vosita — ko'proq qoplama" degan sodda qoidani rad etadi: qo'shimcha
+vosita faqat boshqalar ko'rmaydigan sinf zaifliklarni topsagina qiymat
+qo'shadi.
 
 ### Diagrammalar
 
@@ -153,9 +171,14 @@ matn sifatida beriladi (CLAUDE.md, formatlash qoidasi). Raqamlash
 Chizma yechimlari: bitta o'lchov — bitta rang, 0 dan 24 gacha qat'iy o'q
 (ulushni ko'z bilan solishtirish uchun), ingichka panjara, ingichka to'r,
 har bir panjara uchida to'g'ridan-to'g'ri yozuv. 2-rasmda urg'u naqshi
-ishlatilgan: to'liq qamrovga erishgan kombinatsiya ko'k, qolganlari
-kulrang — ma'no rangga tayanmaydi, chunki barcha qiymatlar yozib
-qo'yilgan.
+ishlatilgan: to'liq qamrovga erishgan qadam ko'k, qolganlari kulrang —
+ma'no rangga tayanmaydi, chunki barcha qiymatlar yozib qo'yilgan.
+
+2-rasmdagi ketma-ketlik qo'lda yozilmagan, ochko'z (greedy) tartibda
+hisoblanadi: har qadamda etalonga eng ko'p YANGI zaiflik qo'shadigan vosita
+tanlanadi, hech narsa qo'shmaydigani esa diagrammaga umuman kirmaydi.
+Shuning uchun Semgrep ning rasmiy qoidalari rasmda yo'q — ular topgan
+hamma narsa Bandit, maxsus qoidalar va CodeQL uchligida allaqachon bor.
 
 ### SCA (pip-audit)
 
@@ -254,10 +277,20 @@ sirlarni ko'rmadi. Maxsus qoida (`ozbekcha-qattiq-kodlangan-sir`)
 ikkalasini ham aniqladi. Bu 3.4-bandning asosiy argumenti va ishning eng
 original natijasi.
 
-**4. Semgrep rasmiy qoidalari etalondan tashqari haqiqiy zaiflik topdi.**
-`app.py:129` — `redirect("/profil?ism=" + login)`, ochiq qayta yo'naltirish
-(open redirect, CWE-601). Etalon ro'yxatda yo'q, shu sababli yolg'on
-ijobiy natija deb hisoblandi. Aslida bu haqiqiy zaiflik (M-4).
+**4. Semgrep ning yagona FP si — tasdiqlangan yolg'on ijobiy natija.**
+`app.py:124` da `open-redirect` qoidasi ishga tushdi va topilmani CWE-601
+deb belgiladi. Topilma etalonda yo'q edi, shuning uchun avval etalonning
+kamchiligi deb taxmin qilindi (M-4) va Z-25 sifatida qo'shib ko'rildi.
+Tekshiruv taxminni rad etdi: `redirect("/profil?ism=" + login)` manzili
+har doim `/profil?ism=` bilan boshlanadi, ya'ni sayt ichidagi nisbiy yo'l.
+Hujumchi faqat so'rov satrining qiymatini boshqaradi, boshqa saytga
+yo'naltira olmaydi — CWE-601 ta'rifi bajarilmaydi.
+
+CodeQL bu yerda jim qoldi, garchi `py/url-redirection` (CWE-601) so'rovi
+ishga tushgan va SARIF da e'lon qilingan bo'lsa ham: uning modeli hujumchi
+host ni o'zgartira olishini talab qiladi. Bitta misolda shablon asosidagi
+va semantik tahlil o'rtasidagi farq ko'rinadi — to'liq tahlili
+`ZAIFLIKLAR.md` ning 4-bo'limida, 3.3-bandga tayyor.
 
 **5. Yolg'on ijobiy natijalarning tabiati.**
 Bandit ning 3 ta FP si — `import pickle` (app.py:17) va `import subprocess`
@@ -329,9 +362,17 @@ funksiya chegarasi bo'yicha moslashtirish kiritildi.
 **M-3 (hal qilindi).** CodeQL lokal CLI orqali ishga tushirildi, natija
 `kod/natijalar/05-codeql.sarif` da.
 
-**M-4. Etalon to'plamda open redirect (CWE-601) yo'q.** Z-25 sifatida
-qo'shish yoki ataylab qoldirilmagan zaiflik deb izohlash kerak — qarori
-qabul qilinmagan.
+**M-4 (hal qilindi).** Open redirect topilmasi Z-25 sifatida etalonga
+qo'shib ko'rildi, so'ng qaytarildi: tekshiruvda u ochiq qayta yo'naltirish
+emasligi aniqlandi (4-kuzatuv). Etalon 24 ta bo'lib qoldi. Topilma
+`ZAIFLIKLAR.md` ning 4-bo'limida tasdiqlangan yolg'on ijobiy natija
+sifatida sabablari bilan hujjatlashtirildi.
+
+Qo'shilgan holatdagi metrikalar (qaytarilgan, faqat taqqoslash uchun):
+Semgrep (rasmiy) Precision 1.00 ga ko'tarilardi, CodeQL esa to'g'ri
+ishlagani uchun FN olib, Recall 0.58 dan 0.56 ga tushardi. Ya'ni xato
+etalon yozuvi noto'g'ri vositani mukofotlab, to'g'risini jazolagan
+bo'lardi.
 
 **M-5. CodeQL ning uchta takroriy xabari aslida alohida masala.**
 `py/reflective-xss` app.py:91 va app.py:101 da ishga tushdi — bu
@@ -350,10 +391,11 @@ beradi: `codeql-action/init@v3`, `analyze@v3` va `upload-sarif@v3` ni v4 ga
 o'tkazish kerak. Hozir ishlaydi, shu sababli tegilmadi — ishni topshirish
 muddatiga qarab qaror qilinadi.
 
-**M-8. Vaqt o'lchovlari muhitga juda bog'liq.** Ayni bir CodeQL tahlili
-lokal Windows muhitida 2761 soniya, GitHub Actions ishchisida 39 soniya —
-~70 barobar farq. Sabab aniqlanmagan. Ishda vaqt jadvalini qaysi muhit
-bo'yicha keltirish kerakligi hal qilinmagan.
+**M-8 (hal qilindi).** Vaqt farqining sababi aniqlandi: birinchi ishga
+tushirishda Semgrep qoidalar bazasini yuklab oladi, CodeQL esa so'rovlarni
+kompilyatsiya qiladi. Kesh isigach CodeQL 2773 dan 57 soniyaga tushdi.
+Vaqt jadvali endi uch ustunli (birinchi / takroriy / CI) va "chuqur tahlil
+sekin" degan xulosa olib tashlandi — bu korpusda u tasdiqlanmaydi.
 
 **M-9. Ombor ochiq.** Ataylab zaif kod `nyxeldev/kurs-ishi-sast` da
 hammaga ko'rinadi — bu kod skanerlashni bepul ishlatish uchun zarur edi

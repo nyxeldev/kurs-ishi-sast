@@ -1,4 +1,4 @@
-Run started:2026-10-25 17:56:29.847707+00:00
+Run started:2026-10-25 20:32:44.581937+00:00
 
 Test results:
 >> Issue: [B403:blacklist] Consider possible security implications associated with pickle module.
@@ -96,7 +96,7 @@ Test results:
    CWE: CWE-94 (https://cwe.mitre.org/data/definitions/94.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b201_flask_debug_true.html
    Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\app.py:148:4
-147	    # tuzatish rejimi; [Z-10] CWE-668: barcha interfeyslarga bog'lanish
+147	    # tuzatish rejimi; [Z-10] CWE-605: barcha interfeyslarga bog'lanish
 148	    app.run(host="0.0.0.0", port=5000, debug=True)
 
 --------------------------------------------------
@@ -105,7 +105,7 @@ Test results:
    CWE: CWE-605 (https://cwe.mitre.org/data/definitions/605.html)
    More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b104_hardcoded_bind_all_interfaces.html
    Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\app.py:148:17
-147	    # tuzatish rejimi; [Z-10] CWE-668: barcha interfeyslarga bog'lanish
+147	    # tuzatish rejimi; [Z-10] CWE-605: barcha interfeyslarga bog'lanish
 148	    app.run(host="0.0.0.0", port=5000, debug=True)
 
 --------------------------------------------------

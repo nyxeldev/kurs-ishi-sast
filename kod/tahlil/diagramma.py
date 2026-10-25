@@ -196,15 +196,25 @@ def main():
     )
 
     # --- 2-rasm. Vositalarni birgalikda qo'llashdagi qamrov ---
-    b = topilgan.get("Bandit", set())
-    c = topilgan.get("CodeQL", set())
-    m = topilgan.get("Semgrep (maxsus)", set())
-    kombinatsiyalar = [
-        ("Bandit", b),
-        ("Bandit + CodeQL", b | c),
-        ("Bandit + maxsus qoidalar", b | m),
-        ("Bandit + CodeQL +\nmaxsus qoidalar", b | c | m),
-    ]
+    # Ochko'z (greedy) tartib: har qadamda etalon to'plamga eng ko'p YANGI
+    # zaiflik qo'shadigan vosita tanlanadi. Shu bilan "to'liq qamrovga
+    # eng qisqa yo'l qanday" degan savolga javob beriladi. Hech narsa
+    # qo'shmaydigan vosita diagrammaga kiritilmaydi.
+    qolgan = dict(topilgan)
+    yigilgan = set()
+    kombinatsiyalar = []
+    while qolgan:
+        nom = sorted(
+            qolgan,
+            key=lambda k: (-len(qolgan[k] - yigilgan), -len(qolgan[k]), k),
+        )[0]
+        kodlar = qolgan.pop(nom)
+        if kombinatsiyalar and not (kodlar - yigilgan):
+            break
+        yigilgan |= kodlar
+        belgi = nom if not kombinatsiyalar else f"+ {nom}"
+        kombinatsiyalar.append((belgi, set(yigilgan)))
+
     yozuvlar2 = [(nom, len(kodlar)) for nom, kodlar in kombinatsiyalar]
     # Urg'u: to'liq qamrovga erishgan kombinatsiya ko'k, qolganlari kulrang
     ranglar2 = [
