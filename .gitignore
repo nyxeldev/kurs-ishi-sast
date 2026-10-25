@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+venv/
+.venv/
+*.db
+kod/natijalar/*.json
+kod/zaif-ilova/yuklamalar/*
+!kod/zaif-ilova/yuklamalar/ozt.txt
+.DS_Store
+~$*.docx
+kod/natijalar/codeql-db/
+kod/natijalar/*.sarif

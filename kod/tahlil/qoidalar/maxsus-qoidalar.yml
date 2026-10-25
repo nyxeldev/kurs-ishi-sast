@@ -1,0 +1,129 @@
+# Loyihaga xos maxsus Semgrep qoidalari
+# Kurs ishining 3.4-bandi uchun ishlab chiqilgan.
+#
+# Ishga tushirish:
+#   semgrep scan --config=kod/tahlil/qoidalar/maxsus-qoidalar.yml kod/zaif-ilova/
+
+rules:
+
+  # ---------------------------------------------------------------
+  # Qoida 1. O'zbekcha identifikatorlardagi qattiq kodlangan sirlar
+  #
+  # Nega kerak: Bandit ning B105 qoidasi faqat inglizcha o'zgaruvchi
+  # nomlarini (password, secret, token, key) taniydi. O'zbek tilidagi
+  # loyihalarda "parol", "kalit", "maxfiy" kabi nomlar ishlatiladi va
+  # standart qoidalar ularni butunlay o'tkazib yuboradi.
+  # ---------------------------------------------------------------
+  - id: ozbekcha-qattiq-kodlangan-sir
+    patterns:
+      - pattern-either:
+          - pattern: $NOM = "..."
+          - pattern: $NOM = '...'
+      - metavariable-regex:
+          metavariable: $NOM
+          regex: (?i).*(parol|kalit|maxfiy|sir|token|kirish_kodi).*
+    message: >-
+      Qattiq kodlangan maxfiy ma'lumot aniqlandi ($NOM). Sirlar kod
+      ichida saqlanmasligi kerak — muhit o'zgaruvchisi yoki maxsus
+      sir boshqaruvi tizimidan foydalaning.
+    languages: [python]
+    severity: ERROR
+    metadata:
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      muallif: "kurs ishi, 3.4-band"
+
+  # ---------------------------------------------------------------
+  # Qoida 2. Flask marshrutida XSS (render_template_string)
+  #
+  # Nega kerak: Bandit XSS ni umuman topmaydi — u shablon mexanizmining
+  # semantikasini bilmaydi. Bu qoida foydalanuvchi kiritmasining
+  # shablonga yetib borishini kuzatadi.
+  # ---------------------------------------------------------------
+  - id: flask-shablon-inyeksiyasi
+    mode: taint
+    pattern-sources:
+      - pattern: flask.request.args.get(...)
+      - pattern: request.args.get(...)
+      - pattern: request.form.get(...)
+      - pattern: request.values.get(...)
+    pattern-sinks:
+      - pattern: render_template_string(...)
+      - pattern: flask.render_template_string(...)
+    message: >-
+      Foydalanuvchi kiritmasi render_template_string() ga tekshirilmagan
+      holda yetib bormoqda. Bu saqlanmagan XSS va server tomonidagi
+      shablon inyeksiyasiga (SSTI) olib keladi.
+    languages: [python]
+    severity: ERROR
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      muallif: "kurs ishi, 3.4-band"
+
+  # ---------------------------------------------------------------
+  # Qoida 3. Yo'l bo'ylab harakatlanish (path traversal)
+  #
+  # Nega kerak: os.path.join() foydalanuvchi kiritmasi bilan
+  # chaqirilganda papka chegarasini kafolatlamaydi — "../" ketma-ketligi
+  # uni butunlay chetlab o'tadi.
+  # ---------------------------------------------------------------
+  - id: yol-boylab-harakatlanish
+    mode: taint
+    pattern-sources:
+      - pattern: request.args.get(...)
+      - pattern: request.form.get(...)
+      - pattern: flask.request.args.get(...)
+    pattern-sinks:
+      - pattern: open(...)
+      - pattern: os.path.join(...)
+    pattern-sanitizers:
+      - pattern: os.path.basename(...)
+      - pattern: werkzeug.utils.secure_filename(...)
+      - pattern: secure_filename(...)
+    message: >-
+      Foydalanuvchi boshqaradigan fayl nomi tozalanmagan holda fayl
+      tizimi operatsiyasiga uzatilmoqda. secure_filename() yoki
+      os.path.basename() qo'llang va natijani ruxsat etilgan papka
+      bilan solishtiring.
+    languages: [python]
+    severity: ERROR
+    metadata:
+      cwe: "CWE-22: Path Traversal"
+      muallif: "kurs ishi, 3.4-band"
+
+  # ---------------------------------------------------------------
+  # Qoida 4. Maxfiy ma'lumotning jurnalga yozilishi
+  # ---------------------------------------------------------------
+  - id: jurnalga-maxfiy-malumot
+    patterns:
+      - pattern-either:
+          - pattern: logging.$METOD(..., $ARG, ...)
+          - pattern: logger.$METOD(..., $ARG, ...)
+      - metavariable-regex:
+          metavariable: $ARG
+          regex: (?i).*(parol|password|token|kalit|secret|sessiya).*
+    message: >-
+      Maxfiy ma'lumot jurnal fayliga yozilmoqda. Jurnal fayllari
+      odatda kengroq doirada o'qiladi va uzoq saqlanadi.
+    languages: [python]
+    severity: WARNING
+    metadata:
+      cwe: "CWE-532: Insertion of Sensitive Information into Log File"
+      muallif: "kurs ishi, 3.4-band"
+
+  # ---------------------------------------------------------------
+  # Qoida 5. E'tiborsiz qoldirilgan istisno holati
+  # ---------------------------------------------------------------
+  - id: etiborsiz-istisno
+    pattern: |
+      try:
+          ...
+      except ...:
+          pass
+    message: >-
+      Istisno holati hech qanday ishlov berilmasdan yutib yuborilmoqda.
+      Bu xavfsizlik tekshiruvlarining jimgina ishdan chiqishini yashiradi.
+    languages: [python]
+    severity: WARNING
+    metadata:
+      cwe: "CWE-390: Detection of Error Condition Without Action"
+      muallif: "kurs ishi, 3.4-band"

@@ -1,0 +1,242 @@
+Run started:2026-10-25 17:56:29.847707+00:00
+
+Test results:
+>> Issue: [B403:blacklist] Consider possible security implications associated with pickle module.
+   Severity: Low   Confidence: High
+   CWE: CWE-502 (https://cwe.mitre.org/data/definitions/502.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b403-import-pickle
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\app.py:17:0
+16	import os
+17	import pickle
+18	import sqlite3
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\app.py:19:0
+18	import sqlite3
+19	import subprocess
+20	
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 's3cr3t-kalit-2024-oz'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\app.py:30:11
+29	# [Z-01] CWE-798: qattiq kodlangan maxfiy kalit
+30	app.config["SECRET_KEY"] = "s3cr3t-kalit-2024-oz"
+31	
+
+--------------------------------------------------
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   Severity: Medium   Confidence: Low
+   CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b608_hardcoded_sql_expressions.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\app.py:48:13
+47	    # [Z-02] CWE-89: SQL inyeksiyasi — so'rov satr birlashtirish orqali tuzilgan
+48	    so_rov = "SELECT id, ism, email FROM foydalanuvchilar WHERE ism = '%s'" % ism
+49	    cur.execute(so_rov)
+
+--------------------------------------------------
+>> Issue: [B602:subprocess_popen_with_shell_equals_true] subprocess call with shell=True identified, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b602_subprocess_popen_with_shell_equals_true.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\app.py:73:13
+72	    # [Z-04] CWE-78: operatsion tizim buyrug'i inyeksiyasi
+73	    natija = subprocess.check_output("ping -c 1 " + manzil, shell=True)
+74	    return natija
+
+--------------------------------------------------
+>> Issue: [B506:yaml_load] Use of unsafe yaml load. Allows instantiation of arbitrary objects. Consider yaml.safe_load().
+   Severity: Medium   Confidence: High
+   CWE: CWE-20 (https://cwe.mitre.org/data/definitions/20.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b506_yaml_load.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\app.py:90:13
+89	    # [Z-05] CWE-502: xavfsiz bo'lmagan deserializatsiya (Loader ko'rsatilmagan)
+90	    konfig = yaml.load(matn)
+91	    return {"konfig": konfig}
+
+--------------------------------------------------
+>> Issue: [B301:blacklist] Pickle and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue.
+   Severity: Medium   Confidence: High
+   CWE: CWE-502 (https://cwe.mitre.org/data/definitions/502.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b301-pickle
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\app.py:100:12
+99	    # [Z-06] CWE-502: ishonchsiz manbadan pickle deserializatsiyasi
+100	    holat = pickle.loads(maydon)
+101	    return {"holat": str(holat)}
+
+--------------------------------------------------
+>> Issue: [B307:blacklist] Use of possibly insecure function - consider using safer ast.literal_eval.
+   Severity: Medium   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b307-eval
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\app.py:110:13
+109	    # [Z-07] CWE-94: kod inyeksiyasi — eval ga foydalanuvchi kiritmasi
+110	    natija = eval(ifoda)
+111	    return {"natija": natija}
+
+--------------------------------------------------
+>> Issue: [B605:start_process_with_a_shell] Starting a process with a shell, possible injection detected, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b605_start_process_with_a_shell.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\app.py:141:4
+140	    # [Z-08] CWE-78: os.system orqali buyruq inyeksiyasi
+141	    os.system("rm -rf /tmp/" + nom)
+142	    return {"holat": "tozalandi"}
+
+--------------------------------------------------
+>> Issue: [B201:flask_debug_true] A Flask app appears to be run with debug=True, which exposes the Werkzeug debugger and allows the execution of arbitrary code.
+   Severity: High   Confidence: Medium
+   CWE: CWE-94 (https://cwe.mitre.org/data/definitions/94.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b201_flask_debug_true.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\app.py:148:4
+147	    # tuzatish rejimi; [Z-10] CWE-668: barcha interfeyslarga bog'lanish
+148	    app.run(host="0.0.0.0", port=5000, debug=True)
+
+--------------------------------------------------
+>> Issue: [B104:hardcoded_bind_all_interfaces] Possible binding to all interfaces.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-605 (https://cwe.mitre.org/data/definitions/605.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b104_hardcoded_bind_all_interfaces.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\app.py:148:17
+147	    # tuzatish rejimi; [Z-10] CWE-668: barcha interfeyslarga bog'lanish
+148	    app.run(host="0.0.0.0", port=5000, debug=True)
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b324_hashlib.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\auth.py:25:11
+24	    # tuz (salt) va kalit cho'zish funksiyasi yo'q
+25	    return hashlib.md5(parol.encode()).hexdigest()
+26	
+
+--------------------------------------------------
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b608_hardcoded_sql_expressions.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\auth.py:34:18
+33	    # [Z-14] CWE-89: f-satr orqali tuzilgan SQL so'rovi
+34	    cur.execute(f"SELECT parol_hash FROM foydalanuvchilar WHERE login = '{login}'")
+35	
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\auth.py:50:20
+49	    # tasodifiy sonlar generatori xavfsizlik tokeni uchun ishlatilmoqda
+50	    token = "".join(random.choice(belgilar) for _ in range(16))
+51	    return token
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak SHA1 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b324_hashlib.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\auth.py:57:11
+56	    # [Z-16] CWE-327: SHA-1 — buzilgan xesh funksiyasi
+57	    return hashlib.sha1(matn.encode()).hexdigest()
+58	
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\auth.py:64:4
+63	    # optimallashtirilgan rejimda (-O) butunlay o'chib qoladi
+64	    assert foydalanuvchi.get("rol") == "admin", "Ruxsat yo'q"
+65	    return True
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\utils.py:8:0
+7	import os
+8	import subprocess
+9	import tempfile
+
+--------------------------------------------------
+>> Issue: [B602:subprocess_popen_with_shell_equals_true] subprocess call with shell=True identified, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b602_subprocess_popen_with_shell_equals_true.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\utils.py:30:13
+29	    buyruq = "python hisobot_generator.py --tur " + tur
+30	    natija = subprocess.run(buyruq, shell=True, capture_output=True)
+31	    return natija.stdout
+
+--------------------------------------------------
+>> Issue: [B501:request_with_no_cert_validation] Call to requests with verify=False disabling SSL certificate checks, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-295 (https://cwe.mitre.org/data/definitions/295.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b501_request_with_no_cert_validation.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\utils.py:37:12
+36	    # [Z-20] CWE-295: TLS sertifikati tekshiruvi o'chirilgan
+37	    javob = requests.get(TASHQI_XIZMAT + endpoint, verify=False, timeout=10)
+38	    return javob.json()
+
+--------------------------------------------------
+>> Issue: [B306:blacklist] Use of insecure and deprecated function (mktemp).
+   Severity: Medium   Confidence: High
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b306-mktemp-q
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\utils.py:45:11
+44	    # (poyga holati — race condition)
+45	    yo_l = tempfile.mktemp(suffix=".txt")
+46	    with open(yo_l, "w", encoding="utf-8") as f:
+
+--------------------------------------------------
+>> Issue: [B103:set_bad_file_permissions] Chmod setting a permissive mask 0o777 on file (yo_l).
+   Severity: High   Confidence: High
+   CWE: CWE-732 (https://cwe.mitre.org/data/definitions/732.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b103_set_bad_file_permissions.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\utils.py:60:4
+59	    # [Z-23] CWE-732: haddan tashqari keng fayl huquqlari
+60	    os.chmod(yo_l, 0o777)
+61	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: C:/Users/Analyst/Documents/Jahongir/kurs-ishi/kod/zaif-ilova\utils.py:67:4
+66	        set_permissions(yo_l)
+67	    except Exception:
+68	        # [Z-24] CWE-390: istisno holati e'tiborsiz qoldirilmoqda —
+69	        # xavfsizlik tekshiruvining ishdan chiqishi yashiriladi
+70	        pass
+71	
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 184
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 7
+		Medium: 7
+		High: 8
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 1
+		Medium: 4
+		High: 17
+Files skipped (0):

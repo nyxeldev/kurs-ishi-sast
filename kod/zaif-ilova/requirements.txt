@@ -1,0 +1,10 @@
+# DIQQAT: versiyalar ataylab eski tanlangan — pip-audit (SCA) vositasining
+# bog'liqliklardagi ma'lum zaifliklarni aniqlash qobiliyatini sinash uchun.
+# Haqiqiy loyihada hech qachon bunday versiyalar ishlatilmaydi.
+
+Flask==0.12.2
+Jinja2==2.10
+Werkzeug==0.14.1
+PyYAML==5.1
+requests==2.19.1
+urllib3==1.24.1

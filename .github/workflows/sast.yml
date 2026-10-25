@@ -1,0 +1,165 @@
+# Statik xavfsizlik tahlilini CI/CD quvuriga integratsiya qilish
+# Kurs ishining 3.5-bandi uchun namuna workflow
+
+name: Statik xavfsizlik tahlili
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  schedule:
+    # Har dushanba soat 06:00 (UTC) — yangi CVE lar uchun muntazam tekshiruv
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+  security-events: write   # SARIF natijalarini yuklash uchun
+
+jobs:
+
+  # ============================================================
+  # 1-ish. Bandit — Python uchun bazaviy statik tahlil
+  # ============================================================
+  bandit:
+    name: Bandit tahlili
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python o'rnatish
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Bandit o'rnatish
+        run: pip install bandit[sarif]
+
+      - name: Tahlilni bajarish
+        # Natija SARIF formatida — GitHub Security tabida ko'rinadi
+        run: |
+          bandit -r kod/zaif-ilova \
+            -f sarif -o bandit.sarif \
+            --exit-zero
+        continue-on-error: true
+
+      - name: Natijalarni yuklash
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: bandit.sarif
+          category: bandit
+
+      # --- Quality gate ---
+      # Yuqori jiddiylikdagi topilma bo'lsa, qurilish to'xtaydi
+      - name: Sifat darvozasi
+        run: |
+          bandit -r kod/zaif-ilova \
+            --severity-level high \
+            --confidence-level medium
+
+  # ============================================================
+  # 2-ish. Semgrep — qoida asosidagi tahlil
+  # ============================================================
+  semgrep:
+    name: Semgrep tahlili
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rasmiy qoidalar bo'yicha tahlil
+        run: |
+          semgrep scan \
+            --config=p/python \
+            --config=p/security-audit \
+            --sarif --output=semgrep.sarif \
+            kod/zaif-ilova
+        continue-on-error: true
+
+      - name: Maxsus qoidalar bo'yicha tahlil
+        run: |
+          semgrep scan \
+            --config=kod/tahlil/qoidalar/maxsus-qoidalar.yml \
+            --sarif --output=semgrep-maxsus.sarif \
+            kod/zaif-ilova
+        continue-on-error: true
+
+      - name: Natijalarni yuklash
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep.sarif
+          category: semgrep
+
+  # ============================================================
+  # 3-ish. CodeQL — semantik tahlil (taint analysis)
+  # ============================================================
+  codeql:
+    name: CodeQL tahlili
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: CodeQL ni ishga tayyorlash
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
+          # security-extended — standartdan kengroq so'rovlar to'plami
+          queries: security-extended
+
+      - name: Tahlilni bajarish
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: codeql-python
+
+  # ============================================================
+  # 4-ish. pip-audit — bog'liqliklar tahlili (SCA)
+  # ============================================================
+  sca:
+    name: Bog'liqliklar tahlili
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: pip-audit o'rnatish
+        run: pip install pip-audit
+
+      - name: Zaif bog'liqliklarni tekshirish
+        run: |
+          pip-audit -r kod/zaif-ilova/requirements.txt \
+            --format json --output pip-audit.json || true
+          pip-audit -r kod/zaif-ilova/requirements.txt
+
+      - name: Hisobotni saqlash
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pip-audit-hisoboti
+          path: pip-audit.json
+
+  # ============================================================
+  # 5-ish. Yakuniy hisobot
+  # ============================================================
+  hisobot:
+    name: Umumiy hisobot
+    runs-on: ubuntu-latest
+    needs: [bandit, semgrep, sca]
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Natijalar xulosasi
+        run: |
+          echo "### Statik tahlil natijalari" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Vosita | Holat |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| Bandit | ${{ needs.bandit.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Semgrep | ${{ needs.semgrep.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| pip-audit | ${{ needs.sca.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Batafsil: **Security** tabi." >> $GITHUB_STEP_SUMMARY
