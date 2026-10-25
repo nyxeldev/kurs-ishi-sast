@@ -34,12 +34,13 @@ Oxirgi yangilanish: 2026-10-26
       tashlandi
 - [x] M-5 tekshirildi: CodeQL ning ikki `reflective-xss` topilmasi yolg'on
       ijobiy deb tasniflandi (`TASDIQLANGAN_FP` ro'yxati)
+- [x] CodeQL Action v3 dan v4 ga o'tkazildi va sinovdan o'tdi (M-7)
 
 ## Bajarilishi kerak
 
 ### Amaliy qism (Claude Code)
 - [ ] Skrinshotlar: har bir vosita chiqishi, GitHub Security tabi
-- [ ] M-7, M-9 bo'yicha qarorlar (pastda)
+- [ ] M-9, M-10 bo'yicha qarorlar (pastda)
 
 ### Matn (Cowork)
 - [ ] 01-bob (11 bet)
@@ -213,17 +214,18 @@ qaytariladi. Noyob identifikatorlar soni — 43. Ishda 43 raqami keltiriladi.
 ## CI/CD natijalari (3.5-band)
 
 Ombor: <https://github.com/nyxeldev/kurs-ishi-sast> (ochiq).
-Oxirgi ish: <https://github.com/nyxeldev/kurs-ishi-sast/actions/runs/40226842276>
+Oxirgi ish: <https://github.com/nyxeldev/kurs-ishi-sast/actions/runs/40238306488>
+(CodeQL Action v4 bilan)
 
 ### Workflow ishlari
 
 | Ish | Natija | Vaqt | Izoh |
 |---|---|---|---|
-| Bandit tahlili | xato | 20 s | tahlil va SARIF yuklash muvaffaqiyatli, **sifat darvozasi** ataylab to'xtatdi |
-| Semgrep tahlili | muvaffaqiyatli | 45 s | ikkita SARIF yuklandi (rasmiy + maxsus) |
-| CodeQL tahlili | muvaffaqiyatli | 39 s | `security-extended` |
-| Bog'liqliklar tahlili | xato | 13 s | hisobot va artefakt muvaffaqiyatli, **sifat darvozasi** to'xtatdi |
-| Umumiy hisobot | muvaffaqiyatli | 5 s | `$GITHUB_STEP_SUMMARY` jadvali |
+| Bandit tahlili | xato | 19 s | tahlil va SARIF yuklash muvaffaqiyatli, **sifat darvozasi** ataylab to'xtatdi |
+| Semgrep tahlili | muvaffaqiyatli | 38 s | ikkita SARIF yuklandi (rasmiy + maxsus) |
+| CodeQL tahlili | muvaffaqiyatli | 51 s | `security-extended` |
+| Bog'liqliklar tahlili | xato | 18 s | hisobot va artefakt muvaffaqiyatli, **sifat darvozasi** to'xtatdi |
+| Umumiy hisobot | muvaffaqiyatli | 6 s | `$GITHUB_STEP_SUMMARY` jadvali |
 
 Ikkala xato ham ataylab: sifat darvozalari yuqori jiddiylikdagi topilma
 (Bandit) va zaif bog'liqlik (pip-audit) borligida qurilishni to'xtatadi.
@@ -412,10 +414,13 @@ Natija: CodeQL Precision 1.00 dan 0.88 ga, F1 0.74 dan 0.70 ga tushdi.
 (`nyxeldev/kurs-ishi-sast`), workflow uch marta ishga tushdi, ikki nuqson
 tuzatildi, Security tab natijalari olindi.
 
-**M-7. CodeQL Action v3 2026-yil dekabrda eskiradi.** Workflow ogohlantirish
-beradi: `codeql-action/init@v3`, `analyze@v3` va `upload-sarif@v3` ni v4 ga
-o'tkazish kerak. Hozir ishlaydi, shu sababli tegilmadi — ishni topshirish
-muddatiga qarab qaror qilinadi.
+**M-7 (hal qilindi).** CodeQL Action v3 dan v4 ga o'tkazildi: `init`,
+`analyze` va uchala `upload-sarif` chaqiruvi. v4 ning yagona farqi —
+Node.js v24 da ishlashi (`codeql-action#3169`); kirish parametrlari va
+xulqi o'zgarmagan, ikkala shox parallel saqlanmoqda (v3.39.1 va v4.39.1
+bir kunda chiqqan). Sinovdan o'tkazildi: CodeQL va Semgrep ishlari
+muvaffaqiyatli, Security tab natijalari aynan o'sha — 70 ogohlantirish,
+bir xil taqsimot. v3 eskirishi haqidagi ogohlantirish yo'qoldi.
 
 **M-8 (hal qilindi).** Vaqt farqining sababi aniqlandi: birinchi ishga
 tushirishda Semgrep qoidalar bazasini yuklab oladi, CodeQL esa so'rovlarni
@@ -429,6 +434,16 @@ hammaga ko'rinadi — bu kod skanerlashni bepul ishlatish uchun zarur edi
 omborni yopiq qilish mumkin, lekin shunda Security tab natijalari
 ko'rinmay qoladi — skrinshotlar oldin olinishi kerak.
 
+**M-10. Boshqa amallar Node.js 20 ni mo'ljallaydi.** v4 ga o'tgandan keyin
+yangi ogohlantirish chiqdi: `actions/checkout@v4` va
+`actions/setup-python@v5` Node.js 20 ni mo'ljallaydi va majburan Node.js
+24 da ishga tushirilmoqda (GitHub 2025-09-19 dagi e'lon). Hozircha
+ishlaydi. Mavjud versiyalar: `checkout` v7.0.1, `setup-python` v7.1.0,
+`upload-artifact` v7.0.2 — ya'ni uch-to'rt katta versiya orqada.
+Bu CodeQL ga aloqasi yo'q alohida masala va katta versiya sakrashi
+bo'lgani uchun ko'r-ko'rona yangilab bo'lmaydi: har birining
+o'zgarishlarini tekshirish kerak.
+
 > SAST qismi to'liq: to'rtta vosita, o'lchangan metrikalar, to'liq
-> moslashtirish jurnali va ishlaydigan CI/CD quvuri. Qolgani — diagramma,
-> skrinshotlar va matn.
+> moslashtirish jurnali va ishlaydigan CI/CD quvuri (CodeQL Action v4).
+> Qolgani — skrinshotlar va matn.
