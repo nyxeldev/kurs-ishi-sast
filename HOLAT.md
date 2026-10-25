@@ -45,7 +45,10 @@ Oxirgi yangilanish: 2026-10-26
 ### Matn (Cowork)
 - [x] 01-bob (11 bet) — yozildi, 3667 so'z, 24 ta manbaga havola
 - [ ] 02-bob (13 bet)
-- [ ] 03-bob (14 bet) — amaliy qism tugagach
+- [x] 03-bob (14 bet) — yozildi, 5854 so'z, 15 jadval, 2 rasm.
+      Barcha raqamlar `kod/natijalar/` dan skript bilan qayta tekshirilgan.
+      DIQQAT: hajm rejadagidan katta (taxminan 16-17 bet), .docx yig'ishda
+      qisqartirish kerak bo'lishi mumkin.
 - [ ] 00-kirish (3 bet)
 - [ ] 04-xulosa (2 bet)
 - [x] Adabiyotlarni 20-25 ta ga yetkazish — 26 ta real manba tasdiqlandi
@@ -446,6 +449,22 @@ tushirishda Semgrep qoidalar bazasini yuklab oladi, CodeQL esa so'rovlarni
 kompilyatsiya qiladi. Kesh isigach CodeQL 2773 dan 57 soniyaga tushdi.
 Vaqt jadvali endi uch ustunli (birinchi / takroriy / CI) va "chuqur tahlil
 sekin" degan xulosa olib tashlandi — bu korpusda u tasdiqlanmaydi.
+
+**M-11. `ZAIFLIKLAR.md` ning 3-bo'limi eskirgan.** 03-bobni yozishda
+aniqlandi. U yerda "Natijada Z-18 ni sinovdagi hech bir vosita topmadi"
+deyilgan, lekin bu CodeQL ishga tushirilishidan oldin yozilgan.
+`qiyosiy-jadval.md` va yuqoridagi 1-kuzatuvga ko'ra **CodeQL Z-18 ni
+topgan** (`py/path-injection`, utils.py:22). 3-bob to'g'ri ma'lumotga
+tayanadi; `ZAIFLIKLAR.md` ning 3-bo'limi yangilanishi kerak.
+
+**M-12. `ZAIFLIKLAR.md` ning 4.1-bandida qator raqami chalkash.** U yerda
+Semgrep ning `open-redirect` topilmasi `app.py:124` deb ko'rsatilib,
+darhol `redirect("/profil?ism=" + login)` kodi keltiriladi. Aslida
+`app.py:124` — taint **manbasi**
+(`login = request.form.get("login", "")`), `redirect()` chaqiruvi esa
+`app.py:129` da. Semgrep taint rejimidagi topilmani manba qatorida e'lon
+qiladi (shu sababli `hisobot.py` da TOLERANS kerak). Vosita chiqishi
+to'g'ri, faqat hujjatdagi izoh chalkash — 3.3-bandda to'g'ri yozilgan.
 
 **M-9. Ombor ochiq.** Ataylab zaif kod `nyxeldev/kurs-ishi-sast` da
 hammaga ko'rinadi — bu kod skanerlashni bepul ishlatish uchun zarur edi
