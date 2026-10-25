@@ -43,12 +43,13 @@ Oxirgi yangilanish: 2026-10-26
 - [ ] M-9, M-10 bo'yicha qarorlar (pastda)
 
 ### Matn (Cowork)
-- [ ] 01-bob (11 bet)
+- [x] 01-bob (11 bet) — yozildi, 3667 so'z, 24 ta manbaga havola
 - [ ] 02-bob (13 bet)
 - [ ] 03-bob (14 bet) — amaliy qism tugagach
 - [ ] 00-kirish (3 bet)
 - [ ] 04-xulosa (2 bet)
-- [ ] Adabiyotlarni 20-25 ta ga yetkazish
+- [x] Adabiyotlarni 20-25 ta ga yetkazish — 26 ta real manba tasdiqlandi
+      (+ II/III bob uchun 5 ta o'rin band qilingan)
 - [ ] Yakuniy .docx hujjat
 
 ---
@@ -352,6 +353,24 @@ Bu 1.2-band (zaifliklarni aniqlash usullari) va 3.5-band uchun qiymatli
 misol: sirlarni skanerlash SAST dan alohida nazorat turi bo'lib, kodni
 tahlil qilmasdan, faqat shablon bo'yicha ishlaydi va eng arzon bosqichda —
 commit/push paytida — to'xtatadi.
+
+---
+
+**9. "100 barobar qimmat" da'vosi ishda dalil sifatida ishlatilmaydi.**
+1.4-bandni yozishda tekshirildi. Manba — Boehm va Basili (IEEE Computer,
+2001, 34(1), 135–137): ular mahsulot topshirilgandan keyingi tuzatish
+"ko'pincha" taxminan 100 barobar qimmatroq deydi, lekin o'sha maqolada
+kichik, kritik bo'lmagan tizimlar uchun nisbat 5:1 ga yaqin ekani ham
+aytilgan. Menzies va boshqalar (Empirical Software Engineering, 2017,
+22(4), 1903–1935) 171 ta loyihada bu effektga dalil topmagan; Bossavit
+dalil bazasini metodologik jihatdan tanqid qilgan.
+
+Qaror: raqam keltiriladi, lekin faqat bahsli da'vo sifatida, ikkala
+tomonga havola bilan. Statik tahlilning foydasi boshqa, tekshiriladigan
+asoslarga tayantiriladi (takrorlash narxi, qamrovning bir xilligi, mehnat
+taqsimoti). **00-kirish va 04-xulosa yozilayotganda shu qaror
+saqlanishi shart** — "kech topilgan zaiflik 100 barobar qimmat" degan
+jumla ishning hech bir joyida dalil sifatida ishlatilmasligi kerak.
 
 ---
 
