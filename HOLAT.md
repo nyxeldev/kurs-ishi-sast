@@ -24,13 +24,16 @@ Oxirgi yangilanish: 2026-10-26
 - [x] CodeQL CLI o'rnatildi (2.27.3), `python-security-extended` bilan tahlil
 - [x] `hisobot.py` CodeQL SARIF chiqishini o'qiydi
 - [x] To'rtta vosita bo'yicha yakuniy metrikalar olindi
+- [x] Loyiha GitHub ga yuklandi (ochiq ombor `nyxeldev/kurs-ishi-sast`)
+- [x] `sast.yml` workflow sinovdan o'tdi, ikki nuqson tuzatildi
+- [x] GitHub Security tab natijalari olindi (70 ogohlantirish)
 
 ## Bajarilishi kerak
 
 ### Amaliy qism (Claude Code)
 - [ ] Diagramma yasash (vositalar bo'yicha aniqlash ulushi)
 - [ ] Skrinshotlar: har bir vosita chiqishi, GitHub Security tabi
-- [ ] M-4, M-5, M-6 bo'yicha qarorlar (pastda)
+- [ ] M-4, M-5, M-7, M-8 bo'yicha qarorlar (pastda)
 
 ### Matn (Cowork)
 - [ ] 01-bob (11 bet)
@@ -81,9 +84,16 @@ Manba: `kod/natijalar/00-vaqt.txt`
 | CodeQL — tahlil (`security-extended`, 52 so'rov) | 2761 s |
 
 CodeQL tahlilining 1514 soniyasi (25 daqiqa) bitta so'rovga —
-`CWE-502/UnsafeDeserialization` ga ketdi. Bandit bilan farq ~2770 barobar.
-Bu 2.2-banddagi "aniqlik va ishlash tezligi o'rtasidagi muvozanat"
-masalasiga bevosita o'lchangan dalil.
+`CWE-502/UnsafeDeserialization` ga ketdi.
+
+> DIQQAT (M-8): bu raqamni CodeQL ning o'ziga xos qiymati deb keltirish
+> mumkin emas. Ayni shu tahlil GitHub Actions ubuntu-latest ishchisida
+> **39 soniyada** tugadi — lokal Windows o'lchoviga qaraganda ~70 barobar
+> tez. Sabab tekshirilmagan (platforma, protsessor, disk tezligi yoki
+> antivirus ta'siri bo'lishi mumkin). Ishda vaqt qiyoslashi uchun CI
+> o'lchovlari ishlatilishi tavsiya etiladi, lokal raqam esa "bir xil
+> so'rov muhitga qarab necha barobar farq qilishi" misoli sifatida
+> keltirilsa to'g'ri bo'ladi.
 
 ---
 
@@ -142,6 +152,57 @@ qaytariladi. Noyob identifikatorlar soni — 43. Ishda 43 raqami keltiriladi.
 
 ---
 
+## CI/CD natijalari (3.5-band)
+
+Ombor: <https://github.com/nyxeldev/kurs-ishi-sast> (ochiq).
+Oxirgi ish: <https://github.com/nyxeldev/kurs-ishi-sast/actions/runs/40226842276>
+
+### Workflow ishlari
+
+| Ish | Natija | Vaqt | Izoh |
+|---|---|---|---|
+| Bandit tahlili | xato | 20 s | tahlil va SARIF yuklash muvaffaqiyatli, **sifat darvozasi** ataylab to'xtatdi |
+| Semgrep tahlili | muvaffaqiyatli | 45 s | ikkita SARIF yuklandi (rasmiy + maxsus) |
+| CodeQL tahlili | muvaffaqiyatli | 39 s | `security-extended` |
+| Bog'liqliklar tahlili | xato | 13 s | hisobot va artefakt muvaffaqiyatli, **sifat darvozasi** to'xtatdi |
+| Umumiy hisobot | muvaffaqiyatli | 5 s | `$GITHUB_STEP_SUMMARY` jadvali |
+
+Ikkala xato ham ataylab: sifat darvozalari yuqori jiddiylikdagi topilma
+(Bandit) va zaif bog'liqlik (pip-audit) borligida qurilishni to'xtatadi.
+Barcha tahlil va SARIF yuklash bosqichlari muvaffaqiyatli o'tdi.
+
+### GitHub Security tab (kod skanerlash ogohlantirishlari)
+
+| Vosita | Kategoriya | Ogohlantirish |
+|---|---|---|
+| Semgrep OSS | `semgrep` | 26 |
+| Bandit | `bandit` | 22 |
+| CodeQL | `codeql-python` | 17 |
+| Semgrep OSS | `semgrep-maxsus` | 5 |
+| **Jami** | | **70** |
+
+Raqamlar lokal ishga tushirish natijalariga **to'liq mos keldi** (26, 22,
+17, 5) — CI va lokal muhit bir xil topilmalarni beradi. Bu amaliy qismning
+takrorlanuvchanligini tasdiqlaydi.
+
+### Workflow da topilgan va tuzatilgan nuqsonlar
+
+Birinchi ish ikki haqiqiy nuqsonni ko'rsatdi:
+
+1. **pip-audit ishi `ResolutionImpossible` bilan yiqildi.** `requirements.txt`
+   dagi versiyalar ataylab ziddiyatli (`requests 2.19.1` → `urllib3<1.24`,
+   lekin `urllib3==1.24.1` qadalgan). `--no-deps --disable-pip` qo'shildi.
+2. **Maxsus qoidalar natijasi tashlab yuborilardi.** `semgrep-maxsus.sarif`
+   yaratilar, lekin yuklash bosqichi faqat `semgrep.sarif` ni oladi edi —
+   3.4-bandning asosiy natijasi Security tabiga yetib bormasdi. Alohida
+   kategoriya bilan yuklash qo'shildi.
+
+Uchinchi nuqson emas, lekin tuzatildi: SCA sifat darvozasi hisobot olish
+bosqichining ichida edi va xato kutilganmi yoki yo'qmi, ajratib bo'lmasdi.
+Endi Bandit ishidagi kabi alohida "Sifat darvozasi" bosqichi.
+
+---
+
 ## Muhim kuzatuvlar
 
 **1. Z-18 ni faqat CodeQL topdi.**
@@ -196,6 +257,23 @@ beradi: `py/path-injection` → CWE-22, 23, 36, 73, 99. Demak CWE bo'yicha
 normallashtirish avtomatik emas; `hisobot.py` shu sababli CWE kodlari
 to'plami bilan ishlaydi.
 
+**8. GitHub ning sir skanerlash himoyasi push ni bloklab qo'ydi.**
+Birinchi `git push` urinishi `GH013: Repository rule violations` bilan rad
+etildi: push protection `auth.py:16` dagi `sk_live_4f3c...` qiymatini
+**Stripe API kaliti** deb tanidi. Himoya statik tahlil vositalarigacha,
+kod omborga tushishidan oldin ishladi — SAST emas, oldini olish nazorati.
+Blokni chetlab o'tish mumkin edi (GitHub maxsus havola beradi), lekin
+qalbaki qiymat haqiqiy provayder formatiga taqlid qilgani uchun uni
+`QALBAKI-API-KALITI-kurs-ishi-2026` ga almashtirish to'g'riroq bo'ldi.
+Qator raqami o'zgarmadi, metrikalar ham o'zgarmadi (maxsus qoida
+o'zgaruvchi nomi bo'yicha ishlaydi, qiymat bo'yicha emas — qayta ishga
+tushirib tasdiqlandi).
+
+Bu 1.2-band (zaifliklarni aniqlash usullari) va 3.5-band uchun qiymatli
+misol: sirlarni skanerlash SAST dan alohida nazorat turi bo'lib, kodni
+tahlil qilmasdan, faqat shablon bo'yicha ishlaydi va eng arzon bosqichda —
+commit/push paytida — to'xtatadi.
+
 ---
 
 ## Moslashtirish metodikasi
@@ -240,11 +318,26 @@ etalon yozuvga bog'lab, takroriy deb hisobladi. FP ga aylantirish CodeQL
 ning Precision ini noo'rin pasaytirardi, shu sababli hozircha takroriy
 sifatida qoldirildi. Ishda izohlash kerak.
 
-**M-6. GitHub Actions workflow sinovdan o'tmagan.**
-`.github/workflows/sast.yml` yozilgan, lekin `kurs-ishi/` Git omboriga
-ulanmagan (`.git` yo'q). 3.5-band uchun GitHub Security tabi skrinshoti
-kerak, buning uchun esa ataylab zaif kodni GitHub ga yuklash talab
-etiladi — qarori qabul qilinmagan.
+**M-6 (hal qilindi).** Loyiha ochiq ombor sifatida GitHub ga yuklandi
+(`nyxeldev/kurs-ishi-sast`), workflow uch marta ishga tushdi, ikki nuqson
+tuzatildi, Security tab natijalari olindi.
 
-> SAST qismi to'liq: to'rtta vosita, o'lchangan metrikalar va to'liq
-> moslashtirish jurnali. Qolgani — diagramma, skrinshotlar va matn.
+**M-7. CodeQL Action v3 2026-yil dekabrda eskiradi.** Workflow ogohlantirish
+beradi: `codeql-action/init@v3`, `analyze@v3` va `upload-sarif@v3` ni v4 ga
+o'tkazish kerak. Hozir ishlaydi, shu sababli tegilmadi — ishni topshirish
+muddatiga qarab qaror qilinadi.
+
+**M-8. Vaqt o'lchovlari muhitga juda bog'liq.** Ayni bir CodeQL tahlili
+lokal Windows muhitida 2761 soniya, GitHub Actions ishchisida 39 soniya —
+~70 barobar farq. Sabab aniqlanmagan. Ishda vaqt jadvalini qaysi muhit
+bo'yicha keltirish kerakligi hal qilinmagan.
+
+**M-9. Ombor ochiq.** Ataylab zaif kod `nyxeldev/kurs-ishi-sast` da
+hammaga ko'rinadi — bu kod skanerlashni bepul ishlatish uchun zarur edi
+(yopiq omborda GitHub Advanced Security talab qilinadi). Ish topshirilgach
+omborni yopiq qilish mumkin, lekin shunda Security tab natijalari
+ko'rinmay qoladi — skrinshotlar oldin olinishi kerak.
+
+> SAST qismi to'liq: to'rtta vosita, o'lchangan metrikalar, to'liq
+> moslashtirish jurnali va ishlaydigan CI/CD quvuri. Qolgani — diagramma,
+> skrinshotlar va matn.
