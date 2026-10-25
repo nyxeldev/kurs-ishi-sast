@@ -136,12 +136,14 @@ jobs:
       - name: pip-audit o'rnatish
         run: pip install pip-audit
 
+      # --no-deps --disable-pip — requirements.txt dagi versiyalar ataylab
+      # ziddiyatli (requests 2.19.1 urllib3<1.24 talab qiladi), shu sababli
+      # bog'liqliklarni qayta hisoblash o'chiriladi.
       - name: Zaif bog'liqliklarni tekshirish
         run: |
           pip-audit -r kod/zaif-ilova/requirements.txt \
             --no-deps --disable-pip \
             --format json --output pip-audit.json || true
-          pip-audit -r kod/zaif-ilova/requirements.txt --no-deps --disable-pip
 
       - name: Hisobotni saqlash
         uses: actions/upload-artifact@v4
@@ -149,6 +151,14 @@ jobs:
         with:
           name: pip-audit-hisoboti
           path: pip-audit.json
+
+      # --- Quality gate ---
+      # pip-audit zaif bog'liqlik topilsa 1 kodi bilan tugaydi va qurilishni
+      # to'xtatadi. Sinovda 6 paketda 43 noyob zaiflik topildi, shu sababli
+      # bu bosqich ataylab muvaffaqiyatsiz bo'ladi — SCA darvozasining
+      # ishlashini ko'rsatadi (3.5-band).
+      - name: Sifat darvozasi
+        run: pip-audit -r kod/zaif-ilova/requirements.txt --no-deps --disable-pip
 
   # ============================================================
   # 5-ish. Yakuniy hisobot
