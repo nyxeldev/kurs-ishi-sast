@@ -47,6 +47,15 @@ Bir qoida bir necha CWE kodini ko'rsatishi mumkin (CodeQL ning
 `py/path-injection` qoidasi beshta kodni beradi). Shu sababli har bir
 topilma uchun CWE kodlari to'plami saqlanadi va mos kelish shu to'plam
 bo'yicha tekshiriladi; jadvallarda esa birinchi (asosiy) kod ko'rsatiladi.
+
+Qo'lda tekshiruv
+----------------
+Evristika topilmaning qaysi zaiflik HAQIDA ekanini bilmaydi — u faqat
+joylashuvga va CWE kodiga qaraydi. Shu sababli ba'zi topilmalar yonidagi
+etalon yozuviga noto'g'ri bog'lanishi mumkin. Bunday hollar qo'lda
+tekshirilib, `TASDIQLANGAN_FP` ro'yxatiga sababi bilan kiritiladi va
+to'g'ridan-to'g'ri yolg'on ijobiy natija deb hisoblanadi. Ro'yxatdagi
+yozuv mos topilma topmasa, skript ogohlantirish beradi.
 """
 
 import ast
@@ -90,6 +99,32 @@ ETALON = {
 
 # Qator raqamidagi ruxsat etilgan farq (vositalar blok boshini ko'rsatishi mumkin)
 TOLERANS = 3
+
+# ---------------------------------------------------------------
+# Qo'lda tekshiruvdan o'tgan va yolg'on ijobiy deb TASDIQLANGAN topilmalar.
+#
+# Moslashtirish evristikasi bu topilmalarni yonidagi etalon yozuviga bog'lab
+# yuborardi (ikkalasi ham bir funksiya tanasida), holbuki ular butunlay
+# boshqa zaiflik sinfi haqida da'vo qiladi. Avtomatik qoida bilan ajratib
+# bo'lmaydi — faqat qo'lda tahlil bilan. Har bir yozuvning sababi
+# ZAIFLIKLAR.md ning 4-bo'limida batafsil keltirilgan.
+#
+# Format: (fayl, qator, qoida) -> qisqa sabab
+# ---------------------------------------------------------------
+TASDIQLANGAN_FP = {
+    ("app.py", 91, "py/reflective-xss"): (
+        "Flask ko'rinishidan qaytarilgan dict application/json javobiga "
+        "aylanadi; brauzer uni HTML sifatida talqin qilmaydi"
+    ),
+    ("app.py", 101, "py/reflective-xss"): (
+        "Flask ko'rinishidan qaytarilgan dict application/json javobiga "
+        "aylanadi; brauzer uni HTML sifatida talqin qilmaydi"
+    ),
+}
+
+# Qaysi yozuvlar haqiqatan ishlatilgani — qator raqamlari surilib ketsa,
+# jimgina e'tibordan chetda qolmasligi uchun kuzatiladi.
+ISHLATILGAN_FP: set[tuple] = set()
 
 
 def bandit_oqish(yo_l: Path):
@@ -222,7 +257,17 @@ def moslashtirish(topilmalar):
     Qaytaradi: (etalon kodi -> uni tasdiqlagan topilmalar ro'yxati,
                 yolg'on ijobiy topilmalar ro'yxati)
     """
-    jadval = [(t, nomzodlar(t)) for t in topilmalar]
+    # 0-o'tish: qo'lda tasdiqlangan yolg'on ijobiy natijalar chetga olinadi
+    jadval = []
+    qolda_fp = []
+    for t in topilmalar:
+        kalit = (t["fayl"], t["qator"], t["qoida"])
+        if kalit in TASDIQLANGAN_FP:
+            ISHLATILGAN_FP.add(kalit)
+            qolda_fp.append(t)
+        else:
+            jadval.append((t, nomzodlar(t)))
+
     topilgan: dict[str, list[dict]] = {}
 
     # 1-o'tish: CWE kodi aniq mos kelgan va hali band bo'lmagan yozuvlar
@@ -236,7 +281,7 @@ def moslashtirish(topilmalar):
             qolgan.append((t, nomz))
 
     # 2-o'tish: band bo'lmagan yozuvlar, so'ngra takroriy xabarlar
-    yolgon = []
+    yolgon = list(qolda_fp)
     for t, nomz in qolgan:
         if not nomz:
             yolgon.append(t)
@@ -292,6 +337,15 @@ def main():
     if not hisob:
         print("XATO: natija fayllari topilmadi. Avval tahlil.sh ni ishga tushiring.")
         return
+
+    # Qo'lda tasdiqlangan FP ro'yxati kodga mos kelmay qolsa — ogohlantirish.
+    # (Qator raqamlari surilganda yozuv jimgina ishlamay qo'yishi mumkin.)
+    ishlatilmagan = set(TASDIQLANGAN_FP) - ISHLATILGAN_FP
+    for kalit in sorted(ishlatilmagan):
+        print(
+            f"OGOHLANTIRISH: TASDIQLANGAN_FP yozuvi mos topilma topmadi: {kalit}. "
+            "Qator raqami surilgan bo'lishi mumkin — tekshiring."
+        )
 
     NATIJA.mkdir(parents=True, exist_ok=True)
 

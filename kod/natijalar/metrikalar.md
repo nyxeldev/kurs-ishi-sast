@@ -7,7 +7,7 @@ Etalon to'plamdagi zaifliklar soni: **24**
 | Bandit | 22 | 19 | 0 | 3 | 5 | 0.86 | 0.79 | 0.83 |
 | Semgrep (rasmiy) | 26 | 15 | 10 | 1 | 9 | 0.94 | 0.62 | 0.75 |
 | Semgrep (maxsus) | 5 | 5 | 0 | 0 | 19 | 1.00 | 0.21 | 0.34 |
-| CodeQL | 17 | 14 | 3 | 0 | 10 | 1.00 | 0.58 | 0.74 |
+| CodeQL | 17 | 14 | 1 | 2 | 10 | 0.88 | 0.58 | 0.70 |
 
 `Topilma` — vosita bergan xabarlar soni; `TP` — tasdiqlangan etalon
 zaifliklar soni; `Takroriy` — ayni bir zaiflik haqidagi qo'shimcha
@@ -32,6 +32,7 @@ berilgan xabarlar.
 
 - yo'q
 
-### CodeQL (0 ta)
+### CodeQL (2 ta)
 
-- yo'q
+- `app.py:91` — py/reflective-xss: Cross-site scripting vulnerability due to a [user-provided value](1).
+- `app.py:101` — py/reflective-xss: Cross-site scripting vulnerability due to a [user-provided value](1).

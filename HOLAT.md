@@ -32,12 +32,14 @@ Oxirgi yangilanish: 2026-10-26
       natija ekani aniqlanib, hujjatlashtirildi (etalon 24 ta bo'lib qoldi)
 - [x] M-8 tekshirildi: vaqt farqi kesh bilan izohlanib, xato xulosa olib
       tashlandi
+- [x] M-5 tekshirildi: CodeQL ning ikki `reflective-xss` topilmasi yolg'on
+      ijobiy deb tasniflandi (`TASDIQLANGAN_FP` ro'yxati)
 
 ## Bajarilishi kerak
 
 ### Amaliy qism (Claude Code)
 - [ ] Skrinshotlar: har bir vosita chiqishi, GitHub Security tabi
-- [ ] M-5, M-7, M-9 bo'yicha qarorlar (pastda)
+- [ ] M-7, M-9 bo'yicha qarorlar (pastda)
 
 ### Matn (Cowork)
 - [ ] 01-bob (11 bet)
@@ -116,12 +118,22 @@ Manba: `kod/natijalar/metrikalar.md`, `kod/natijalar/qiyosiy-jadval.md`,
 
 | Vosita | Topilma | TP | Takroriy | FP | FN | Precision | Recall | F1 |
 |---|---|---|---|---|---|---|---|---|
-| Bandit | 22 | 19 | 0 | 3 | 5 | 0.86 | 0.79 | **0.83** |
+| Bandit | 22 | 19 | 0 | 3 | 5 | 0.86 | **0.79** | **0.83** |
 | Semgrep (rasmiy) | 26 | 15 | 10 | 1 | 9 | 0.94 | 0.62 | 0.75 |
 | Semgrep (maxsus) | 5 | 5 | 0 | 0 | 19 | 1.00 | 0.21 | 0.34 |
-| CodeQL | 17 | 14 | 3 | 0 | 10 | **1.00** | 0.58 | 0.74 |
+| CodeQL | 17 | 14 | 1 | 2 | 10 | 0.88 | 0.58 | 0.70 |
 
 Etalon to'plam: 24 ta zaiflik.
+
+CodeQL ning ikkita FP si qo'lda tekshiruvdan keyin shunday tasniflandi
+(M-5): `py/reflective-xss` qoidasi `app.py:91` va `app.py:101` da ishga
+tushgan, lekin u yerda javob `application/json` — batafsil
+`ZAIFLIKLAR.md` ning 4.2-bandida. Avval ular takroriy xabar deb
+hisoblanardi va CodeQL Precision i 1.00 ko'rinardi.
+
+Keng qamrovli qoidalar to'plamiga ega uch vositaning hech biri mukammal
+aniqlikka erishmadi. 1.00 ko'rsatkichi faqat maxsus qoidalarda — ular
+ataylab tor yozilgani uchun.
 
 ### O'tkazib yuborilgan zaifliklar
 
@@ -260,14 +272,17 @@ ma'lumot oqimini kuzatmaydi. CodeQL `py/path-injection` qoidasi bilan
 utils.py:22 da aniqladi. Bu semantik tahlilning shablon asosidagi tahlildan
 ustunligini ko'rsatadigan eng toza misol (2.2-band).
 
-**2. CodeQL eng aniq, lekin eng tor qamrovli.**
-Precision 1.00 — bitta ham yolg'on ijobiy natija bermadi. Ammo Recall
-faqat 0.58: qattiq kodlangan sirlar (Z-01, Z-11, Z-12), zaif xesh
+**2. CodeQL eng chuqur, lekin eng tor qamrovli.**
+Recall atigi 0.58: qattiq kodlangan sirlar (Z-01, Z-11, Z-12), zaif xesh
 funksiyalari (Z-13, Z-16), `random` moduli (Z-15), `assert` (Z-17),
 jurnalga maxfiy ma'lumot (Z-22), e'tiborsiz istisno (Z-24) va 0.0.0.0 ga
 bog'lanish (Z-10) — bularning hech biri `security-extended` to'plamiga
-kirmaydi. Bandit bu "oddiy shablon" zaifliklarini 1 soniyada topadi.
+kirmaydi. Bandit bu "oddiy shablon" zaifliklarini 1-2 soniyada topadi.
 Xulosa: chuqur tahlil keng qamrovni almashtirmaydi, to'ldiradi.
+
+Precision bo'yicha ham CodeQL mukammal emas: 0.88 (M-5). Uning kuchi
+aniqlikda emas, balki **boshqalar umuman ko'rmaydigan** zaiflikni
+(Z-18) topishida.
 
 **3. Bandit ning sirlarni aniqlash qoidasi tilga bog'liq.**
 Inglizcha `SECRET_KEY` (Z-01) `B105` bilan topildi, o'zbekcha `DB_PAROL`
@@ -296,12 +311,18 @@ va semantik tahlil o'rtasidagi farq ko'rinadi — to'liq tahlili
 Bandit ning 3 ta FP si — `import pickle` (app.py:17) va `import subprocess`
 (app.py:19, utils.py:8) uchun B403/B404 ogohlantirishlari; import o'zi
 zaiflik emas. Semgrep ning yagona FP si — yuqoridagi open redirect.
-CodeQL da FP yo'q.
+CodeQL ning ikkitasi — JSON javobidagi "aks etgan XSS" (4.2-band).
+
+Uchala holat ham bir xil sinfdan: qoida ma'lumot oqimini to'g'ri
+kuzatadi, lekin cho'kmaning kontekstini baholamaydi. Bandit ning FP lari
+esa boshqa sinfdan — oqim umuman tahlil qilinmaydi, import ko'ringani
+uchun ogohlantirish beriladi. 3.3-bandda ikkala sinfni ajratib
+ko'rsatish kerak.
 
 **6. Takroriy xabarlar soni vositaga qarab keskin farqlanadi.**
 Semgrep (rasmiy): 26 xabardan 10 tasi takroriy — Z-04 uchun uchta qoida
 (`dangerous-subprocess-use`, `subprocess-injection`, `subprocess-shell-true`)
-bir vaqtda ishlaydi. CodeQL: 17 dan 3 tasi. Bandit: 0 ta. Deduplikatsiyasiz
+bir vaqtda ishlaydi. CodeQL: 17 dan 1 tasi. Bandit: 0 ta. Deduplikatsiyasiz
 Precision sun'iy pasayadi, shu sababli `hisobot.py` takroriy xabarlarni
 alohida ustunda hisoblaydi (2.4-band, alert fatigue).
 
@@ -374,13 +395,18 @@ ishlagani uchun FN olib, Recall 0.58 dan 0.56 ga tushardi. Ya'ni xato
 etalon yozuvi noto'g'ri vositani mukofotlab, to'g'risini jazolagan
 bo'lardi.
 
-**M-5. CodeQL ning uchta takroriy xabari aslida alohida masala.**
-`py/reflective-xss` app.py:91 va app.py:101 da ishga tushdi — bu
-`yaml.load` va `pickle.loads` natijasining javobga qaytarilishi, ya'ni
-Z-05/Z-06 dan farqli zaiflik. Moslashtirish ularni ayni bir funksiyadagi
-etalon yozuvga bog'lab, takroriy deb hisobladi. FP ga aylantirish CodeQL
-ning Precision ini noo'rin pasaytirardi, shu sababli hozircha takroriy
-sifatida qoldirildi. Ishda izohlash kerak.
+**M-5 (hal qilindi).** `py/reflective-xss` ning `app.py:91` va
+`app.py:101` dagi topilmalari tekshirildi. Ular na takroriy xabar, na
+haqiqiy zaiflik — **yolg'on ijobiy natija**: Flask ko'rinishidan
+qaytarilgan lug'at `application/json` javobiga aylanadi va brauzer uni
+HTML sifatida talqin qilmaydi. Taint oqimining o'zi to'g'ri kuzatilgan,
+xato faqat cho'kma kontekstini baholamaslikda.
+
+Amalga oshirish: `hisobot.py` ga `TASDIQLANGAN_FP` ro'yxati qo'shildi —
+qo'lda tekshiruvdan o'tgan topilmalar sababi bilan qayd etiladi va
+to'g'ridan-to'g'ri FP deb hisoblanadi. Ro'yxatdagi yozuv mos topilma
+topmasa (masalan qator raqami surilsa), skript ogohlantirish beradi.
+Natija: CodeQL Precision 1.00 dan 0.88 ga, F1 0.74 dan 0.70 ga tushdi.
 
 **M-6 (hal qilindi).** Loyiha ochiq ombor sifatida GitHub ga yuklandi
 (`nyxeldev/kurs-ishi-sast`), workflow uch marta ishga tushdi, ikki nuqson

@@ -96,7 +96,19 @@ sinovdagi hech bir vosita topmadi.
 
 ---
 
-## 4. Tasdiqlangan yolg'on ijobiy natija: ochiq qayta yo'naltirish
+## 4. Tasdiqlangan yolg'on ijobiy natijalar
+
+Quyidagi topilmalar qo'lda tekshirilib, yolg'on ijobiy natija deb
+tasdiqlandi. Ikkalasi ham bir xil sababga ega: qoida ma'lumot oqimini
+to'g'ri kuzatadi, lekin **cho'kmaning kontekstini** baholamaydi — ya'ni
+ma'lumot yetib borgan joyda u haqiqatan zarar keltira oladimi, degan
+savolni so'ramaydi.
+
+`kod/tahlil/hisobot.py` dagi `TASDIQLANGAN_FP` ro'yxati 4.2-banddagi
+ikkita topilmani yolg'on ijobiy deb belgilaydi (4.1-dagi topilma etalonga
+yaqin emasligi uchun avtomatik ravishda shunday hisoblanadi).
+
+### 4.1. Ochiq qayta yo'naltirish — Semgrep
 
 Semgrep ning rasmiy `python.flask.security.open-redirect.open-redirect`
 qoidasi `app.py:124` da topilma beradi va uni CWE-601 (ochiq qayta
@@ -139,6 +151,56 @@ kontekstini baholamaydi; CodeQL zaiflikning ekspluatatsiya qilinish
 shartini modellashtiradi va shu sababli jim qoladi. Yolg'on ijobiy
 natijalarning katta qismi aynan shunday — qoida to'g'ri ishlaydi, lekin
 uning modeli haqiqiy xavfni ifodalash uchun yetarlicha nozik emas.
+
+### 4.2. JSON javobidagi aks etgan XSS — CodeQL
+
+CodeQL ning `py/reflective-xss` qoidasi uch joyda ishga tushdi:
+`app.py:64`, `app.py:91` va `app.py:101`. Birinchisi to'g'ri — u Z-03
+(`render_template_string`) ni ko'rsatadi. Qolgan ikkitasi yolg'on ijobiy.
+
+**Kod:**
+
+```python
+konfig = yaml.load(matn)        # 90-qator, Z-05
+return {"konfig": konfig}       # 91-qator — CodeQL shu yerni belgilaydi
+
+holat = pickle.loads(maydon)    # 100-qator, Z-06
+return {"holat": str(holat)}    # 101-qator — CodeQL shu yerni belgilaydi
+```
+
+**Oqim to'g'ri.** SARIF dagi `codeFlows` ni tekshirganda ko'rinadiki,
+CodeQL manbadan (`request.form.get`, `request.files`) cho'kmagacha
+(`Dict` — ko'rinishning qaytish qiymati) oqimni xatosiz kuzatgan.
+
+**Sabab.** Flask 1.1.0 (2019-yil 4-iyul) dan boshlab ko'rinishdan
+qaytarilgan lug'at `jsonify()` orqali `application/json` javobiga
+aylanadi. Brauzer bunday javobni HTML sifatida talqin qilmaydi, demak
+skript bajarilmaydi — aks etgan XSS uchun shart bajarilmaydi. Qo'shimcha
+ravishda ikkala marshrut ham faqat POST ni qabul qiladi, bu esa aks etgan
+XSS ni ekspluatatsiya qilishni yanada qiyinlashtiradi.
+
+`py/reflective-xss` qoidasining rasmiy tavsifi javob turini umuman
+tilga olmaydi: u "foydalanuvchi kiritmasini tozalamasdan veb-sahifaga
+yozish" deb ta'riflanadi. Ya'ni qoida `Content-Type` ni modellashtirmaydi.
+
+**Qo'shimcha kuzatuv.** `requirements.txt` da Flask 0.12.2 qadalgan, unda
+ko'rinishdan lug'at qaytarish umuman qo'llab-quvvatlanmaydi (bu imkoniyat
+1.1.0 da qo'shilgan). Ya'ni qadalgan muhitda bu kod ishlamay, xato
+bergan bo'lardi. Bu statik tahlilning yana bir cheklovini ko'rsatadi:
+vosita kutubxonaning zamonaviy modelidan foydalanadi va loyihada
+qadalgan versiyani hisobga olmaydi.
+
+**Nega "takroriy" emas.** Dastlab bu topilmalar Z-05 va Z-06 ning
+takroriy xabari deb hisoblangan edi, chunki ular ayni bir funksiya
+tanasida joylashgan. Bu noto'g'ri: Z-05 va Z-06 — deserializatsiya
+zaifliklari (CWE-502), bu topilmalar esa boshqa sinf (CWE-79) haqida
+da'vo qiladi. Ularni takroriy deb sanash CodeQL Z-05/Z-06 ni
+tasdiqlagandek ko'rsatardi, holbuki u butunlay boshqa narsa haqida
+xabar bergan.
+
+**Metrikaga ta'siri.** CodeQL ning Precision ko'rsatkichi 1.00 dan
+0.88 ga (14 / 16), F1 esa 0.74 dan 0.70 ga tushdi. Ya'ni sinovdagi
+hech bir vosita mukammal aniqlikka erishmadi.
 
 ---
 

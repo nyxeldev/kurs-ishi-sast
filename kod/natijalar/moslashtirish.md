@@ -81,9 +81,9 @@ Har bir vosita xabarining qaysi etalon zaiflikka bog'langani.
 | app.py:64 | `py/template-injection` | CWE-74 | Z-03 | CWE-79 |
 | app.py:73 | `py/command-line-injection` | CWE-78 | Z-04 | CWE-78 |
 | app.py:90 | `py/unsafe-deserialization` | CWE-502 | Z-05 | CWE-502 |
-| app.py:91 | `py/reflective-xss` | CWE-79 | Z-05 | CWE-502 |
+| app.py:91 | `py/reflective-xss` | CWE-79 | FP | — |
 | app.py:100 | `py/unsafe-deserialization` | CWE-502 | Z-06 | CWE-502 |
-| app.py:101 | `py/reflective-xss` | CWE-79 | Z-06 | CWE-502 |
+| app.py:101 | `py/reflective-xss` | CWE-79 | FP | — |
 | app.py:110 | `py/code-injection` | CWE-94 | Z-07 | CWE-94 |
 | app.py:141 | `py/command-line-injection` | CWE-78 | Z-08 | CWE-78 |
 | app.py:148 | `py/flask-debug` | CWE-215 | Z-09 | CWE-489 |
