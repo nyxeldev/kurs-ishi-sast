@@ -27,11 +27,11 @@ Oxirgi yangilanish: 2026-10-26
 - [x] Loyiha GitHub ga yuklandi (ochiq ombor `nyxeldev/kurs-ishi-sast`)
 - [x] `sast.yml` workflow sinovdan o'tdi, ikki nuqson tuzatildi
 - [x] GitHub Security tab natijalari olindi (70 ogohlantirish)
+- [x] Diagrammalar yasaldi (`diagramma.py`, natija fayllaridan hisoblanadi)
 
 ## Bajarilishi kerak
 
 ### Amaliy qism (Claude Code)
-- [ ] Diagramma yasash (vositalar bo'yicha aniqlash ulushi)
 - [ ] Skrinshotlar: har bir vosita chiqishi, GitHub Security tabi
 - [ ] M-4, M-5, M-7, M-8 bo'yicha qarorlar (pastda)
 
@@ -133,6 +133,29 @@ Etalon to'plam: 24 ta zaiflik.
 
 Hech bir vosita yolg'iz 19 tadan ko'pini topmadi, uchtasi birgalikda esa
 to'liq qoplama beradi. Bu xulosa bobining asosiy dalili.
+
+### Diagrammalar
+
+`kod/tahlil/diagramma.py` ikkita rasmni yasaydi. Raqamlar `hisobot.py` ning
+moslashtirish mantiqidan olinadi — diagrammada qo'lda kiritilgan qiymat yo'q,
+vositalar chiqishi o'zgarsa rasm ham o'zgaradi.
+
+| Fayl | Mazmuni | Taklif qilinadigan nom |
+|---|---|---|
+| `kod/natijalar/rasm-1-aniqlash-ulushi.png` | har bir vositaning aniqlash ulushi | 3.1-rasm. Vositalarning etalon zaifliklarni aniqlash ulushi |
+| `kod/natijalar/rasm-2-birgalikda-qamrov.png` | kombinatsiyalar bo'yicha qamrov | 3.2-rasm. Vositalarni birgalikda qo'llashdagi qamrov |
+
+Har bir rasm PNG (300 dpi, Word uchun) va SVG (vektor) ko'rinishida
+saqlanadi. Rasm nomi rasm ichiga yozilmagan — kurs ishida u rasm ostida
+matn sifatida beriladi (CLAUDE.md, formatlash qoidasi). Raqamlash
+3-bobdagi rasmlar tartibiga qarab aniqlanadi.
+
+Chizma yechimlari: bitta o'lchov — bitta rang, 0 dan 24 gacha qat'iy o'q
+(ulushni ko'z bilan solishtirish uchun), ingichka panjara, ingichka to'r,
+har bir panjara uchida to'g'ridan-to'g'ri yozuv. 2-rasmda urg'u naqshi
+ishlatilgan: to'liq qamrovga erishgan kombinatsiya ko'k, qolganlari
+kulrang — ma'no rangga tayanmaydi, chunki barcha qiymatlar yozib
+qo'yilgan.
 
 ### SCA (pip-audit)
 
