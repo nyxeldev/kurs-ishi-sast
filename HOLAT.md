@@ -456,6 +456,36 @@ kompilyatsiya qiladi. Kesh isigach CodeQL 2773 dan 57 soniyaga tushdi.
 Vaqt jadvali endi uch ustunli (birinchi / takroriy / CI) va "chuqur tahlil
 sekin" degan xulosa olib tashlandi — bu korpusda u tasdiqlanmaydi.
 
+**M-16. Formatlash namuna hujjatga moslashtirildi.**
+Muallif namuna sifatida boshqa kurs ishini berdi
+(`Nizamov_Sardorbek_Kurs_ishi`, 39 bet, 7 156 so'z). U Word orqali
+o'qilib, formatlash unga moslashtirildi:
+
+| Jihat | Namuna | Oldin | Endi |
+|---|---|---|---|
+| Bob sarlavhasi | 14 pt markaz | 16 pt | 14 pt |
+| Jadval/rasm nomi | markaz, 12 pt, kursiv | chap, 14 pt qalin | markaz, 12 pt, kursiv |
+| Bet raqami | pastda markazda | pastda o'ngda | pastda markazda |
+| Kod shrifti | Consolas | Courier New | Consolas |
+| Jadval ichi | 11 pt | 10-12 pt | 11 pt (7 ustunda 10) |
+| 3-daraja sarlavha | oddiy qalin paragraf | sarlavha uslubi | oddiy paragraf |
+| Titul beti | muassasa/fakultet/kafedra/yo'nalish/talaba/fan, "KURS ISHI" 20 pt, "Reyting bali" | bo'sh chiziqlar | namuna tartibida |
+
+Chekkalar, asosiy shrift (TNR 14 pt), qator oralig'i (1,5), ikki chetga
+tekislash va 12,5 mm abzats ikkala hujjatda allaqachon bir xil edi.
+
+**Ataylab namunadan chetlashilgan ikki joy:**
+1. **Mundarija avtomatik qoldirildi.** Namunada u qo'lda yozilgan va
+   nuqsonli (sahifa raqami matnga yopishgan: "KIRISH03", "XULOSA035").
+   Bizda Word maydoni, o'zi yangilanadi. Namunada mundarijada faqat
+   boblar bor, bizda bandlar ham (1.1, 1.2, ...).
+2. **Bob sarlavhalari yangi betdan uslub orqali** (namunada qo'lda bet
+   uzilishi bilan) — ko'rinishi bir xil, lekin matn o'zgarganda buzilmaydi.
+
+**Titul betida to'ldirilmagan joylar** (ma'lumot menda yo'q, o'ylab
+topilmadi): ta'lim muassasasi, fakultet, kafedra, yo'nalish, kurs, fan
+nomi, shahar, familiya.
+
 **M-14. Hujjat hajmi chegaradan oshdi: 58 bet (chegara 35-45).**
 `ilovalar/kurs-ishi.docx` Word da o'lchandi. Bet taqsimoti (mundarijadagi
 raqamlar bo'yicha):
