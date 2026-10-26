@@ -1,18 +1,5 @@
 # FOYDALANILGAN ADABIYOTLAR
 
-> **Holat:** I va II bob manbalari bilan to'ldirildi — 32 ta tekshirilgan
-> manba.
->
-> **Qoida:** ishda havola qilinmagan manba ro'yxatda turmaydi.
-> Murojaat sanasi faqat amalda ochib tekshirilgan tarmoq manbalari uchun
-> ko'rsatilgan. Bosma va retsenziyali nashrlar (jurnal maqolalari,
-> kitoblar) uchun GOST bo'yicha murojaat sanasi talab qilinmaydi — ularda
-> jild, son, betlar va DOI keltiriladi.
-
----
-
-## Standartlar va rasmiy hujjatlar
-
 1. MITRE Corporation. Common Weakness Enumeration (CWE). —
    https://cwe.mitre.org/ (murojaat sanasi: 26.10.2026).
 
@@ -44,10 +31,6 @@
    https://www.first.org/cvss/v4.0/specification-document
    (murojaat sanasi: 26.10.2026).
 
----
-
-## Vositalarning rasmiy hujjatlari
-
 9. PyCQA. Bandit Documentation. — https://bandit.readthedocs.io/
 
 10. Semgrep, Inc. Semgrep Documentation. — https://semgrep.dev/docs/
@@ -63,10 +46,6 @@
 
 14. OASIS. Static Analysis Results Interchange Format (SARIF) v2.1.0. —
     https://docs.oasis-open.org/sarif/sarif/v2.1.0/
-
----
-
-## Qo'shimcha rasmiy hujjatlar va qo'llanmalar
 
 15. NIST. Special Publication 800-204C: Implementation of DevSecOps for
     a Microservices-based Application with Service Mesh /
@@ -89,10 +68,6 @@
 19. GitHub, Inc. About secret scanning. GitHub Docs. —
     https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning
     (murojaat sanasi: 26.10.2026).
-
----
-
-## Ilmiy manbalar
 
 20. Boehm B., Basili V. R. Software Defect Reduction Top 10 List //
     IEEE Computer. — 2001. — Vol. 34, No. 1. — P. 135–137. —
@@ -123,18 +98,10 @@
     https://abseil.io/resources/swe-book/html/ch20.html
     (murojaat sanasi: 26.10.2026).
 
----
-
-## Sanoat hisobotlari
-
 26. Black Duck Software, Inc. 2026 Open Source Security and Risk
     Analysis Report (OSSRA). — 2026-yil 25-fevral. —
     https://www.blackduck.com/resources/analyst-reports/open-source-security-risk-analysis.html
     (murojaat sanasi: 26.10.2026).
-
----
-
-## Darsliklar va nazariy manbalar
 
 27. Aho A. V., Lam M. S., Sethi R., Ullman J. D. Compilers: Principles,
     Techniques, and Tools. — 2nd ed. — Boston: Addison-Wesley, 2006.
@@ -154,10 +121,6 @@
     1953. — Vol. 74, No. 2. — P. 358–366. —
     DOI: 10.1090/S0002-9947-1953-0053041-6.
 
----
-
-## Etalon to'plamlar
-
 31. OWASP Foundation. OWASP Benchmark. —
     https://owasp.org/www-project-benchmark/
     (murojaat sanasi: 26.10.2026).
@@ -165,18 +128,3 @@
 32. NIST. Software Assurance Reference Dataset (SARD): Test Suites. —
     https://samate.nist.gov/SARD/test-suites
     (murojaat sanasi: 26.10.2026).
-
----
-
-## To'ldirilishi kerak
-
-33. *(mavjud bo'lsa to'ldirilsin)* O'zbekiston Respublikasining axborot
-    xavfsizligi sohasidagi davlat standartlari va me'yoriy hujjatlari
-
----
-
-## Eslatma
-
-Kurs ishida `kod/natijalar/` dagi o'z sinov natijalaringiz birlamchi
-manba hisoblanadi — ularga alohida havola berish shart emas, lekin
-ilovada to'liq keltiriladi.

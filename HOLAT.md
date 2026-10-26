@@ -458,6 +458,44 @@ kompilyatsiya qiladi. Kesh isigach CodeQL 2773 dan 57 soniyaga tushdi.
 Vaqt jadvali endi uch ustunli (birinchi / takroriy / CI) va "chuqur tahlil
 sekin" degan xulosa olib tashlandi — bu korpusda u tasdiqlanmaydi.
 
+**M-18. Hujjat 45 betga keltirildi (M-14 va M-17 yopildi).**
+Asosiy qism 64 betdan **45 betga** tushirildi, ilovalar bilan jami 51 bet.
+`reja.md` ga ko'ra ilovalar hajm chegarasiga kirmaydi.
+
+| Bo'lim | Oldin | Endi | Reja |
+|---|---|---|---|
+| Titul + mundarija | 3 | 3 | — |
+| KIRISH | 5 | 4 | 3 |
+| I BOB | 16 | 10 | 11 |
+| II BOB | 1 (bo'sh) | 6 | 13 |
+| III BOB | 25 | 16 | 14 |
+| XULOSA | 4 | 3 | 2 |
+| ADABIYOTLAR | 4 | 3 | 2 |
+| **ASOSIY QISM** | **58** | **45** | **38-42** |
+| ILOVALAR | — | 6 | hajmga kirmaydi |
+
+**Qanday erishildi.** Uch yo'l birgalikda:
+
+1. **Jadvallar ilovalarga ko'chirildi** (`matn/05-ilovalar.md` yaratildi):
+   CWE Top 25 va OWASP Top 10 toifalari → A ilovasi; etalon to'plamning
+   24 qatorli ro'yxati → B ilovasi; qiyosiy jadval (24 qator), o'tkazib
+   yuborishlar sabablari (13 qator), CodeQL so'rovlari (11 qator) va
+   Bandit chiqishi namunasi → C ilovasi; CI/CD natijalari (ikki jadval)
+   → D ilovasi. Matnda havolalar qoldirildi, tahlil buzilmadi.
+2. **Matn qisqartirildi:** I bob 3667 → 2525 so'z (−31 %), III bob
+   5722 → 3793 (−34 %), kirish 1053 → 903, xulosa 927 → 776,
+   adabiyotlar ishchi izohlardan tozalandi. Hech bir raqam, havola yoki
+   talab qilingan tahlil elementi olib tashlanmadi.
+3. **Formatlash zichlashtirildi:** sarlavha va jadval oraliqlari
+   kamaytirildi; adabiyotlar ro'yxati bir qatorli oraliqqa o'tkazildi
+   (bibliografiya uchun standart amaliyot). Asosiy matnning 1,5 oralig'i,
+   14 pt shrifti va chekkalari o'zgarmadi.
+
+**Tekshirildi:** 32 manba, hammasi matnda havola qilingan va hech bir
+havola mavjud bo'lmagan manbaga ketmaydi; jadval raqamlari izchil
+(1.1, 2.1, 3.1–3.9, A.1–A.2, B.1, C.1–C.3, D.1–D.2); to'rtta ilovaning
+hammasiga matndan havola bor; ishchi izohlar qolmadi.
+
 **M-17. 45 bet maqsadi II bobning hajmi bilan erishilmaydi.**
 Muallif II bobni "hujjat 45 betga sig'adigan" hajmda yozishni so'radi.
 Arifmetika shuni ko'rsatadi: II bob **bo'sh** bo'lganda ham hujjat

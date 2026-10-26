@@ -16,33 +16,25 @@ MITRE korporatsiyasining keng tarqalgan nuqsonlar ro'yxati 2026-yil oktabr
 holatiga 944 ta nuqson turini o'z ichiga oladi [1], OWASP Top 10
 ro'yxatining 2025-yilgi tahriri esa 2,8 milliondan ortiq ilova bo'yicha
 to'plangan ma'lumotlarga va taxminan 220 000 ta CVE yozuviga tayanadi [3].
-O'sha tahrirda ta'minot zanjiridagi nuqsonlar alohida, mustaqil toifa
-sifatida ro'yxatga kirgani [3] bu yo'nalishning qanchalik ustuvor bo'lib
-qolganini ko'rsatadi.
+O'sha tahrirda ta'minot zanjiridagi nuqsonlar alohida toifa sifatida
+ro'yxatga kirgani [3] bu yo'nalishning ustuvorligini ko'rsatadi.
 
 Kodni har bir o'zgarishda avtomatik tekshirish shu sababli sanoat
-amaliyotiga aylandi. Masshtab tasavvurini yirik ishlab chiqish
-muhitlaridagi ko'rsatkichlar beradi: Google kompaniyasining statik tahlil
-platformasi kuniga 50 000 dan ortiq kod ko'rigi o'zgarishini tahlil
-qiladi [25]. Ayni paytda bu avtomatlashtirishning o'z narxi bor —
-B. Johnson va hammualliflarining tadqiqotida ishlab chiquvchilar statik
-tahlil vositalarining qiymatini tan olgan holda, yolg'on ijobiy natijalarni
-va natijalarning taqdim etilish usulini ulardan foydalanishga asosiy
-to'siq deb ko'rsatgan [24].
+amaliyotiga aylandi: Google kompaniyasining statik tahlil platformasi
+kuniga 50 000 dan ortiq kod ko'rigi o'zgarishini tahlil qiladi [25]. Ayni
+paytda bu avtomatlashtirishning o'z narxi bor — B. Johnson va
+hammualliflarining tadqiqotida ishlab chiquvchilar vositalarning qiymatini
+tan olgan holda, yolg'on ijobiy natijalarni va natijalarning taqdim etilish
+usulini ulardan foydalanishga asosiy to'siq deb ko'rsatgan [24]. Statik
+tahlilni joriy etish adabiyotda ko'pincha zaiflikni kech aniqlash narxining
+keskin o'sishi haqidagi da'vo bilan asoslanadi; ushbu ishda bu da'vo dalil
+sifatida ishlatilmaydi, chunki uning dalil bazasi zamonaviy empirik
+tadqiqotlarda tasdiqlanmagan (1.4-band).
 
-Statik tahlilni joriy etish adabiyotda ko'pincha zaiflikni kech aniqlash
-narxining keskin o'sishi haqidagi da'vo bilan asoslanadi. Ushbu ishda bu
-da'vo dalil sifatida ishlatilmaydi: 1.4-bandda ko'rsatilganidek, uning
-dalil bazasi zamonaviy empirik tadqiqotlarda tasdiqlanmagan va metodologik
-tanqidga uchragan. Statik tahlilning iqtisodiy ma'nosi boshqa,
-tekshirilishi mumkin bo'lgan asoslarga — avtomatik tekshiruvning deyarli
-bepul takrorlanishiga, qamrovning bir xilligiga va muhandis vaqtini
-avtomatika yetmaydigan masalalarga bo'shatishiga — tayanadi.
-
-Alohida, hozirgacha deyarli o'rganilmagan jihat — xalqaro statik tahlil
-vositalarining milliy tilda nomlangan kod bilan ishlashi. Mavjud etalon
-to'plamlar butunlay ingliz tilidagi namunalardan tuzilgan, shu sababli bu
-savolni ular ustida sinab ko'rish mumkin emas. Ushbu ishda masala alohida
+Alohida, hozirgacha deyarli o'rganilmagan jihat — xalqaro vositalarning
+milliy tilda nomlangan kod bilan ishlashi. Mavjud etalon to'plamlar
+butunlay ingliz tilidagi namunalardan tuzilgan, shu sababli bu savolni
+ular ustida sinab ko'rish mumkin emas. Ushbu ishda masala alohida
 tekshirildi va natija kutilmagan bo'lib chiqdi (3.3-band).
 
 ### Muammoning qo'yilishi
@@ -53,12 +45,9 @@ savollar odatda javobsiz qoladi: qaysi vosita qanday sinf zaifliklarni
 haqiqatan topadi, nimani umuman ko'rmaydi, bu cheklov vositaning tahlil
 usulidan kelib chiqadimi yoki shunchaki qoidalar to'plamining bo'shligimi,
 va bir necha vositani birgalikda qo'llash qoplamani qanchalik oshiradi.
-
 Vositalar hujjatlari bu savollarga javob bermaydi, chunki ular o'z
 mahsulotini tavsiflaydi, uni raqobatchilar bilan bir xil sharoitda
-solishtirmaydi. Mustaqil qiyosiy baholash esa oldindan ma'lum etalon
-to'plamni, bir xil sinov muhitini va har bir topilmani qo'lda tekshirishni
-talab qiladi.
+solishtirmaydi.
 
 Shundan kelib chiqib, muammo quyidagicha qo'yiladi: statik kod tahlili
 vositalarining zaifliklarni aniqlash samaradorligini nazorat qilinadigan
@@ -99,75 +88,52 @@ Maqsadga erishish uchun quyidagi vazifalar belgilandi:
    vositalarni CI/CD quvuriga integratsiya qilib, sifat darvozasining
    ishlashini sinash (3.4, 3.5-bandlar).
 
-### Tadqiqot obyekti va predmeti
+### Tadqiqot obyekti, predmeti va metodlari
 
 **Tadqiqot obyekti** — dasturiy ta'minotni xavfsiz ishlab chiqish jarayoni
-va undagi kod darajasidagi xavfsizlik nazoratlari.
+va undagi kod darajasidagi xavfsizlik nazoratlari. **Tadqiqot predmeti** —
+statik kod tahlili vositalarining Python kodidagi zaifliklarni aniqlash
+samaradorligi, ularning cheklovlari va uzluksiz integratsiya quvuriga
+joriy etish usullari.
 
-**Tadqiqot predmeti** — statik kod tahlili vositalarining Python kodidagi
-zaifliklarni aniqlash samaradorligi, ularning cheklovlari va uzluksiz
-integratsiya quvuriga joriy etish usullari.
-
-### Tadqiqot metodlari
-
-Ishda bir necha metod birgalikda qo'llanildi.
-
-**Manbalarni tahlil qilish.** Nazariy qism rasmiy standartlar va hujjatlar
-(MITRE, OWASP, NIST, FIRST), vositalarning rasmiy hujjatlari hamda
-retsenziyali ilmiy nashrlar asosida tuzildi. Har bir faktik da'vo manbaga
-havola bilan beriladi; manbasi topilmagan raqam ishga umuman kiritilmadi.
-
-**Qiyosiy tahlil.** Aniqlash usullari (statik, dinamik, interaktiv tahlil
-va bog'liqliklar tahlili) hamda tanlangan vositalar yagona mezonlar
-to'plami bo'yicha solishtirildi.
-
-**Eksperiment.** Nazorat qilinadigan sinov obyekti — oldindan qayd etilgan
-zaifliklarga ega, ataylab zaif qilingan ilova — ishlab chiqildi. Barcha
-vositalar bir xil kod ustida, bir xil muhitda ishga tushirildi, muhit va
-vositalar versiyalari avtomatik qayd etildi.
-
-**Metrik baholash.** Natijalar etalon to'plamga nisbatan
-normallashtirilib, Precision, Recall va F1 ko'rsatkichlari hisoblandi.
-Hisoblash qo'lda emas, skript orqali bajariladi va har bir topilmaning
-qaysi etalon yozuviga bog'langani alohida jurnalda qayd etiladi, bu esa
-natijalarni mustaqil qayta tekshirish imkonini beradi.
-
-**Topilmalarni qo'lda tasniflash.** Har bir yolg'on ijobiy natija va har
-bir o'tkazib yuborilgan zaiflik alohida tekshirilib, sababi aniqlandi.
-Aynan shu bosqich metrikalar o'zi bermaydigan — nima uchun vosita
-zaiflikni ko'rmagani haqidagi — xulosalarni berdi.
-
-**Joriy etishni sinash.** Tanlangan vositalar amaldagi CI/CD quvuriga
-integratsiya qilinib, ochiq omborda bir necha marta ishga tushirildi va
-natijalari lokal o'lchovlar bilan solishtirildi.
+Ishda bir necha metod birgalikda qo'llanildi. **Manbalarni tahlil
+qilish**: nazariy qism rasmiy standartlar (MITRE, OWASP, NIST, FIRST),
+vositalarning rasmiy hujjatlari va retsenziyali ilmiy nashrlar asosida
+tuzildi; har bir faktik da'vo manbaga havola bilan beriladi, manbasi
+topilmagan raqam ishga umuman kiritilmadi. **Qiyosiy tahlil va
+eksperiment**: aniqlash usullari hamda tanlangan vositalar yagona mezonlar
+bo'yicha solishtirildi, nazorat qilinadigan sinov obyekti — oldindan qayd
+etilgan zaifliklarga ega, ataylab zaif qilingan ilova — ishlab chiqildi va
+barcha vositalar bir xil kod ustida, bir xil muhitda ishga tushirildi.
+**Metrik baholash va topilmalarni qo'lda tasniflash**: natijalar etalon
+to'plamga nisbatan normallashtirilib, Precision, Recall va F1
+ko'rsatkichlari skript orqali hisoblandi va har bir bog'lanish jurnalda
+qayd etildi; har bir yolg'on ijobiy natija va o'tkazib yuborilgan zaiflik
+alohida tekshirilib, sababi aniqlandi — aynan shu bosqich metrikalar o'zi
+bermaydigan xulosalarni berdi. **Joriy etishni sinash**: vositalar
+amaldagi CI/CD quvuriga integratsiya qilinib, ochiq omborda ishga
+tushirildi va natijalari lokal o'lchovlar bilan solishtirildi.
 
 ### Ishning tuzilishi
 
 Ish kirish, uch bob, xulosa, foydalanilgan adabiyotlar ro'yxati va
 ilovalardan iborat.
 
-**Birinchi bobda** dasturiy xavfsizlik va kodni tahlil qilishning asoslari
-bayon etiladi: zaiflik, ekspluatatsiya va xavf tushunchalari, CWE, OWASP
-Top 10, CVE/NVD va CVSS tizimlari; zaifliklarni aniqlashning to'rtta
-asosiy usuli qiyosiy jadval bilan; statik tahlilning xavfsiz hayotiy
-sikldagi va CI/CD quvuridagi o'rni; hamda usulni qo'llashning iqtisodiy
-asoslanishi.
+**Birinchi bobda** dasturiy xavfsizlik asoslari bayon etiladi: zaiflik,
+ekspluatatsiya va xavf tushunchalari, CWE, OWASP Top 10, CVE/NVD va CVSS
+tizimlari; aniqlashning to'rtta asosiy usuli qiyosiy jadval bilan; statik
+tahlilning xavfsiz hayotiy sikldagi va CI/CD quvuridagi o'rni; hamda
+usulni qo'llashning iqtisodiy asoslanishi.
 
-**Ikkinchi bobda** statik tahlil vositalarining ishlash prinsipi ko'rib
-chiqiladi: leksik va sintaktik tahlildan abstrakt sintaksis daraxti,
-boshqaruv oqimi grafi, ma'lumotlar oqimi va zaharlangan ma'lumot
-tahliligacha; tahlil usullarining turlari va ular orasidagi muvozanat;
-amaldagi vositalarning sharhi; samaradorlikni baholash metodologiyasi va
-statik tahlilning nazariy cheklovlari.
+**Ikkinchi bobda** vositalarning ishlash prinsipi ko'rib chiqiladi:
+abstrakt sintaksis daraxti, boshqaruv oqimi grafi, ma'lumotlar oqimi va
+zaharlangan ma'lumot tahlili; tahlil usullarining turlari; amaldagi
+vositalarning sharhi; samaradorlikni baholash metodologiyasi va nazariy
+cheklovlar.
 
-**Uchinchi bob** amaliy qism bo'lib, to'rtta vositaning qiyosiy sinovini
-o'z ichiga oladi: sinov obyekti va metodika, vositalarni ishga tushirish
-natijalari, ularning qiyosiy tahlili, loyihaga xos maxsus qoidalar ishlab
-chiqish va CI/CD quvuriga integratsiya.
-
-**Xulosada** har bir vazifa bo'yicha erishilgan natijalar jamlanadi,
-vositalarni tanlash bo'yicha amaliy tavsiyalar beriladi va keyingi
-tadqiqot yo'nalishlari ko'rsatiladi.
-
-Ilovalarda sinov ilovasining to'liq kodi, vositalarning to'liq hisobotlari,
-maxsus qoidalar fayli, CI/CD workflow fayli va skrinshotlar keltiriladi.
+**Uchinchi bob** amaliy qism: sinov obyekti va metodika, vositalarni ishga
+tushirish natijalari, qiyosiy tahlil, loyihaga xos maxsus qoidalar ishlab
+chiqish va CI/CD quvuriga integratsiya. **Xulosada** har bir vazifa
+bo'yicha erishilgan natijalar jamlanadi va tavsiyalar beriladi. Ilovalarda
+tasnif jadvallari, etalon to'plam va vositalar natijalarining to'liq
+jadvallari keltiriladi.
