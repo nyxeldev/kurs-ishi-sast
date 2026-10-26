@@ -44,7 +44,9 @@ Oxirgi yangilanish: 2026-10-26
 
 ### Matn (Cowork)
 - [x] 01-bob (11 bet) — yozildi, 3667 so'z, 24 ta manbaga havola
-- [ ] 02-bob (13 bet)
+- [x] 02-bob — yozildi, 1477 so'z, 6 bet (rejada 13 bet edi; hajm
+      ataylab qisqartirildi, M-17 ga qarang). Bitta jadval, 2.1-2.5
+      bandlar, har bandda xulosa. Olti yangi manba qo'shildi.
 - [x] 03-bob (14 bet) — yozildi, 5854 so'z, 15 jadval, 2 rasm.
       Barcha raqamlar `kod/natijalar/` dan skript bilan qayta tekshirilgan.
       DIQQAT: hajm rejadagidan katta (taxminan 16-17 bet), .docx yig'ishda
@@ -455,6 +457,41 @@ tushirishda Semgrep qoidalar bazasini yuklab oladi, CodeQL esa so'rovlarni
 kompilyatsiya qiladi. Kesh isigach CodeQL 2773 dan 57 soniyaga tushdi.
 Vaqt jadvali endi uch ustunli (birinchi / takroriy / CI) va "chuqur tahlil
 sekin" degan xulosa olib tashlandi — bu korpusda u tasdiqlanmaydi.
+
+**M-17. 45 bet maqsadi II bobning hajmi bilan erishilmaydi.**
+Muallif II bobni "hujjat 45 betga sig'adigan" hajmda yozishni so'radi.
+Arifmetika shuni ko'rsatadi: II bob **bo'sh** bo'lganda ham hujjat
+57-58 bet edi, ya'ni maqsad II bobning hajmidan mustaqil.
+
+II bob 1477 so'z (6 bet) qilib yozildi — rejadagi 13 bet emas, lekin
+o'z vazifasi uchun yetarli. Hozirgi holat:
+
+| Bo'lim | Haqiqatda | Rejada | 45 bet uchun |
+|---|---|---|---|
+| Titul + mundarija | 3 | — | 3 |
+| KIRISH | 5 | 3 | 4 |
+| I BOB | 16 | 11 | 11 |
+| II BOB | 6 | 13 | 6 |
+| III BOB | 25 | 14 | 15 |
+| XULOSA | 4 | 2 | 3 |
+| ADABIYOTLAR | 5 | 2 | 3 |
+| **JAMI** | **64** | **38-42** | **45** |
+
+Ya'ni 45 betga tushish uchun **19 bet (~3 900 so'z) qisqartirish** kerak,
+va uning asosiy qismi — **III bobdan 10 bet**.
+
+Tavsiya etiladigan tartib (eng arzondan boshlab):
+1. Adabiyotlardagi ishchi izohlar va 33-o'rin olib tashlansa: ~1 bet;
+2. III bobdagi katta jadvallarni ilovalarga ko'chirish — 3.2 (etalon,
+   24 qator), 3.8 (qiyosiy, 24 qator), 3.10 (FN sabablari, 13 qator),
+   3.5 (CodeQL so'rovlari, 11 qator) va to'rtta kod bloki: ~4-5 bet.
+   Matnda havola qoladi, tahlil buzilmaydi;
+3. III bob matnini ~1 000 so'zga qisqartirish: ~5 bet;
+4. I bob matnini ~1 000 so'zga qisqartirish: ~5 bet;
+5. Kirish va xulosadan 1 bet.
+
+2-band tahlilga tegmaydi, shuning uchun eng xavfsiz. 3- va 4-bandlar
+yozilgan matnni qisqartirishni talab qiladi — bu muallif qarori.
 
 **M-16. Formatlash namuna hujjatga moslashtirildi.**
 Muallif namuna sifatida boshqa kurs ishini berdi

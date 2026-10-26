@@ -1,7 +1,7 @@
 # FOYDALANILGAN ADABIYOTLAR
 
-> **Holat:** I bob manbalari bilan to'ldirildi. II va III boblar uchun
-> qo'shimcha manbalar kerak (oxirgi bo'limga qarang).
+> **Holat:** I va II bob manbalari bilan to'ldirildi — 32 ta tekshirilgan
+> manba.
 >
 > **Qoida:** ishda havola qilinmagan manba ro'yxatda turmaydi.
 > Murojaat sanasi faqat amalda ochib tekshirilgan tarmoq manbalari uchun
@@ -134,24 +134,43 @@
 
 ---
 
-## To'ldirilishi kerak (II va III boblar uchun)
+## Darsliklar va nazariy manbalar
 
-> Quyidagilarni kutubxona bazalaridan (IEEE Xplore, ACM DL, Google
-> Scholar) topib, to'liq bibliografik ma'lumotlari bilan qo'shing.
+27. Aho A. V., Lam M. S., Sethi R., Ullman J. D. Compilers: Principles,
+    Techniques, and Tools. — 2nd ed. — Boston: Addison-Wesley, 2006.
 
-27. *(to'ldirilsin)* Zaharlangan ma'lumot tahlili (taint analysis)
-    algoritmlari — 2.1-band
+28. Cousot P., Cousot R. Abstract Interpretation: A Unified Lattice Model
+    for Static Analysis of Programs by Construction or Approximation of
+    Fixpoints // Conference Record of the Fourth ACM Symposium on
+    Principles of Programming Languages (POPL '77). — Los Angeles, 1977. —
+    P. 238–252. — DOI: 10.1145/512950.512973.
 
-28. *(to'ldirilsin)* Abstrakt interpretatsiya nazariyasi
-    (Cousot & Cousot) — 2.2-band
+29. Livshits V. B., Lam M. S. Finding Security Vulnerabilities in Java
+    Applications with Static Analysis // Proceedings of the 14th USENIX
+    Security Symposium. — Baltimore, 2005. — P. 271–286.
 
-29. *(to'ldirilsin)* Kompilyatorlar nazariyasi darsligi: AST va
-    ma'lumotlar oqimi tahlili bo'limlari — 2.1-band
+30. Rice H. G. Classes of Recursively Enumerable Sets and Their Decision
+    Problems // Transactions of the American Mathematical Society. —
+    1953. — Vol. 74, No. 2. — P. 358–366. —
+    DOI: 10.1090/S0002-9947-1953-0053041-6.
 
-30. *(to'ldirilsin)* OWASP Benchmark va Juliet Test Suite etalon
-    to'plamlari — 2.4-band
+---
 
-31. *(mavjud bo'lsa to'ldirilsin)* O'zbekiston Respublikasining axborot
+## Etalon to'plamlar
+
+31. OWASP Foundation. OWASP Benchmark. —
+    https://owasp.org/www-project-benchmark/
+    (murojaat sanasi: 26.10.2026).
+
+32. NIST. Software Assurance Reference Dataset (SARD): Test Suites. —
+    https://samate.nist.gov/SARD/test-suites
+    (murojaat sanasi: 26.10.2026).
+
+---
+
+## To'ldirilishi kerak
+
+33. *(mavjud bo'lsa to'ldirilsin)* O'zbekiston Respublikasining axborot
     xavfsizligi sohasidagi davlat standartlari va me'yoriy hujjatlari
 
 ---
