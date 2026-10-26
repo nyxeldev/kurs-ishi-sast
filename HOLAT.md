@@ -49,8 +49,10 @@ Oxirgi yangilanish: 2026-10-26
       Barcha raqamlar `kod/natijalar/` dan skript bilan qayta tekshirilgan.
       DIQQAT: hajm rejadagidan katta (taxminan 16-17 bet), .docx yig'ishda
       qisqartirish kerak bo'lishi mumkin.
-- [ ] 00-kirish (3 bet)
-- [ ] 04-xulosa (2 bet)
+- [x] 00-kirish (3 bet) — yozildi, 1068 so'z. Olti vazifa belgilandi,
+      har biri aniq bandlarga bog'langan. Yangi manba qo'shilmadi.
+- [x] 04-xulosa (2 bet) — yozildi, 941 so'z (~2,8 bet). Vazifa -> natija
+      tuzilmasi, yangi fakt va yangi manba yo'q, havola ishlatilmagan.
 - [x] Adabiyotlarni 20-25 ta ga yetkazish — 26 ta real manba tasdiqlandi
       (+ II/III bob uchun 5 ta o'rin band qilingan)
 - [ ] Yakuniy .docx hujjat
@@ -449,6 +451,23 @@ tushirishda Semgrep qoidalar bazasini yuklab oladi, CodeQL esa so'rovlarni
 kompilyatsiya qiladi. Kesh isigach CodeQL 2773 dan 57 soniyaga tushdi.
 Vaqt jadvali endi uch ustunli (birinchi / takroriy / CI) va "chuqur tahlil
 sekin" degan xulosa olib tashlandi — bu korpusda u tasdiqlanmaydi.
+
+**M-13. Kirish va xulosa II bobga tayanadi, lekin II bob hali yozilmagan.**
+00-kirish va 04-xulosa yozilganda `matn/02-bob.md` bo'sh skelet edi (42
+so'z). Shu sababli:
+
+- kirishdagi **3-** va **4-vazifa** hamda "Ishning tuzilishi" bo'limidagi
+  II bob tavsifi `reja.md` ga (tasdiqlangan rejaga) tayanadi, yozilgan
+  matnga emas;
+- xulosadagi 3- va 4-vazifa natijalari ataylab faqat I va III bobda
+  haqiqatan asoslangan da'volar bilan cheklangan (tahlil chuqurligi
+  ierarxiyasi va to'rtta vositaning tanlanishi) — II bobdan hech qanday
+  raqam yoki xulosa keltirilmagan.
+
+**02-bob yozilgandan keyin tekshirilishi SHART:** kirishdagi 3- va
+4-vazifa matni, "Ishning tuzilishi" dagi II bob paragrafi va xulosadagi
+3-/4-vazifa natijalari yozilgan matnga mos kelishi. Agar II bob
+rejadagidan farq qilsa, uchala joy ham yangilanadi.
 
 **M-11. `ZAIFLIKLAR.md` ning 3-bo'limi eskirgan.** 03-bobni yozishda
 aniqlandi. U yerda "Natijada Z-18 ni sinovdagi hech bir vosita topmadi"
