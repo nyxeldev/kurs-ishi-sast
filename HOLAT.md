@@ -55,7 +55,11 @@ Oxirgi yangilanish: 2026-10-26
       tuzilmasi, yangi fakt va yangi manba yo'q, havola ishlatilmagan.
 - [x] Adabiyotlarni 20-25 ta ga yetkazish — 26 ta real manba tasdiqlandi
       (+ II/III bob uchun 5 ta o'rin band qilingan)
-- [ ] Yakuniy .docx hujjat
+- [x] Yakuniy .docx hujjat — `ilovalar/kurs-ishi.docx` yig'ildi
+      (titul, mundarija, kirish, 3 bob, xulosa, adabiyotlar; 18 jadval,
+      2 rasm). Formatlash Word COM orqali tekshirilgan.
+      **DIQQAT: 58 bet chiqdi, CLAUDE.md dagi chegara 35-45 bet.**
+      Batafsil pastdagi M-14 da.
 
 ---
 
@@ -451,6 +455,50 @@ tushirishda Semgrep qoidalar bazasini yuklab oladi, CodeQL esa so'rovlarni
 kompilyatsiya qiladi. Kesh isigach CodeQL 2773 dan 57 soniyaga tushdi.
 Vaqt jadvali endi uch ustunli (birinchi / takroriy / CI) va "chuqur tahlil
 sekin" degan xulosa olib tashlandi — bu korpusda u tasdiqlanmaydi.
+
+**M-14. Hujjat hajmi chegaradan oshdi: 58 bet (chegara 35-45).**
+`ilovalar/kurs-ishi.docx` Word da o'lchandi. Bet taqsimoti (mundarijadagi
+raqamlar bo'yicha):
+
+| Bo'lim | Haqiqatda | Rejada |
+|---|---|---|
+| Titul + mundarija | 3 | — |
+| KIRISH | 5 | 3 |
+| I BOB | 16 | 11 |
+| II BOB (yozilmagan) | 1 | 13 |
+| III BOB | 25 | 14 |
+| XULOSA | 4 | 2 |
+| ADABIYOTLAR | 4 | 2 |
+| **JAMI** | **58** | **38-42** |
+
+**Sababi — bet zichligini noto'g'ri baholaganim.** Boblarni yozganda
+333 so'z/bet deb hisoblagan edim; Times New Roman 14 pt, 1,5 oraliq va
+30/15/20/20 chekkalarda haqiqiy zichlik **~205 so'z/bet** (11 256 so'z /
+55 bet matn). Ya'ni 35-45 bet chegarasi taxminan **7 200-9 200 so'zga**
+to'g'ri keladi, hozirgi matn esa 11 256 so'z — va II bob hali yo'q.
+
+**Eng muhim xulosa:** II bob rejadagi 13 betga yozilsa, jami ~70 bet
+bo'ladi. Shuning uchun II bobni yozishdan OLDIN qaror kerak: yoki
+chegarani oshirish kelishiladi, yoki I/III bob qisqartiriladi, yoki
+II bob rejadagidan ancha qisqa yoziladi.
+
+Qisqartirish uchun eng arzon variantlar (tahlil matniga tegmasdan):
+- 3.2-jadval (etalon to'plam, 24 qator) va 3.8-jadval (qiyosiy jadval,
+  24 qator) — A/B ilovasiga, matnda havola qoldirilib: ~3-4 bet;
+- 3.5-jadval (CodeQL so'rovlari) va kod bloklari — B ilovasiga: ~1 bet;
+- adabiyotlardagi ishchi izohlar va "To'ldirilishi kerak" bo'limi
+  olib tashlansa: ~1 bet.
+
+**M-15. Hujjatda ishchi izohlar qolgan.** Yig'ish ataylab "sodiq"
+bajarildi — hech narsa jimgina tashlab ketilmadi. Natijada hujjatga
+quyidagilar ham tushdi va topshirishdan oldin olib tashlanishi kerak:
+- `02-bob.md` dagi "> **Holat:** yozilmagan. Hajm: 13 bet." izohi;
+- `adabiyotlar.md` dagi "> **Holat:**" va "> **Qoida:**" izohlari,
+  "To'ldirilishi kerak (II va III boblar uchun)" bo'limi (27-31 o'rinlar)
+  va oxirgi "Eslatma" bo'limi — ikkisi mundarijaga ham chiqdi;
+- titul betidagi to'ldirilmagan joylar: ta'lim muassasasi, fakultet,
+  guruh, ilmiy rahbar, shahar. Bu ma'lumotlar menda yo'q, shuning uchun
+  ataylab bo'sh chiziq qoldirildi.
 
 **M-13. Kirish va xulosa II bobga tayanadi, lekin II bob hali yozilmagan.**
 00-kirish va 04-xulosa yozilganda `matn/02-bob.md` bo'sh skelet edi (42
